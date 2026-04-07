@@ -8,6 +8,11 @@ public class AirJordan extends Character {
     public AirJordan() {
         super("AirJordan", "The GOAT", 575, 540);
     }
+    
+    @Override
+    public String getImagePath(){
+        return "/Characters/Jordan/jordan.gif";
+    }
 
     @Override
     public void useSkill1(Character target) {

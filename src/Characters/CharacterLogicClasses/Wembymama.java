@@ -8,6 +8,11 @@ public class Wembymama extends Character {
     public Wembymama() {
         super("Wembymama", "The Unicorn", 600, 560);
     }
+    
+    @Override
+    public String getImagePath(){
+        return "/Characters/Wembayama/wembyra.gif";
+    }
 
     @Override
     public void useSkill1(Character target) {

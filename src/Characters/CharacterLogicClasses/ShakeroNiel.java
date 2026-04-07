@@ -10,6 +10,11 @@ public class ShakeroNiel extends Character {
     public ShakeroNiel() {
         super("ShakeroNiel", "Diesel", 685, 410);
     }
+    
+    @Override
+    public String getImagePath(){
+        return "/Characters/ShackONiel/shaq.gif";
+    }
 
     @Override
     public void useSkill1(Character target) {

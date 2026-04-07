@@ -20,6 +20,8 @@ public abstract class Character {
         this.turnCounter = 0;
         this.totalHealingReceived = 0;
     }
+    
+    public abstract String getImagePath();
 
     public void takeDamage(int damage) {
         hp -= damage;
