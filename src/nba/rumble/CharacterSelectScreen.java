@@ -25,6 +25,8 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
         }
     }
     
+    
+    
     private void setupCharacterButtons(javax.swing.JButton btn, String characterPath){
         ImageIcon icon = new ImageIcon(getClass().getResource(characterPath));
         Image img = icon.getImage().getScaledInstance(btn.getWidth(), btn.getHeight(), Image.SCALE_DEFAULT);
@@ -53,7 +55,7 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
         setupCharacterButtons(btnLuca1,"/Characters/Luca/lucaplayercard.png");
         setupCharacterButtons(btnWemba1,"/Characters/Wembayama/wembayamaplayercard.png");
         
-                //Arcade
+        //Arcade
         setupCharacterButtons(btnJordan2,"/Characters/Jordan/jordanplayercard.png");
         setupCharacterButtons(btnKobe2,"/Characters/Kobe/kobeplayercard.png");
         setupCharacterButtons(btnLarry2,"/Characters/LarryBird/larrybirdplayercard.png");
