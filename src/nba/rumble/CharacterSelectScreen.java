@@ -6,6 +6,18 @@ package nba.rumble;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
+import Characters.CharacterLogicClasses.Character;
+import Characters.CharacterLogicClasses.AirJordan;
+import Characters.CharacterLogicClasses.ChefCurry;
+import Characters.CharacterLogicClasses.Kowbe;
+import Characters.CharacterLogicClasses.LarryBird;
+import Characters.CharacterLogicClasses.Lebrony;
+import Characters.CharacterLogicClasses.Luca;
+import Characters.CharacterLogicClasses.ShakeroNiel;
+import Characters.CharacterLogicClasses.Wembymama;
+
 
 /**
  *
@@ -13,6 +25,7 @@ import javax.swing.ImageIcon;
  */
 public class CharacterSelectScreen extends javax.swing.JFrame {
     
+    //Panel on Main Menu screen, dictates what panel to show when button is pressed 
     public void showModePanel(String mode){
         pnlPVE.setVisible(false);
         pnlArcade.setVisible(false);
@@ -25,13 +38,73 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
         }
     }
     
+    private boolean isPlayer1Turn = true; // true = Player 1's turn, false = Player 2's turn
     
+    
+    private Character player1Character;
+    private Character player2Character;
+    
+
+
+    private boolean player1Picked = false;
+    private boolean player2Picked = false;
+    
+
+
+    
+    private void selectCharacter(Character selectedCharacter) {
+        // If it's Player 1's turn but they've already picked, do nothing
+        if (isPlayer1Turn && player1Picked) {
+            return;
+        }
+
+        // If it's Player 2's turn but they've already picked, do nothing
+        if (!isPlayer1Turn && player2Picked) {
+            return;
+        }
+
+        String path = selectedCharacter.getImagePath(); 
+        ImageIcon icon1 = new ImageIcon(getClass().getResource(path));
+        ImageIcon icon2 = new ImageIcon(getClass().getResource(path));
+
+        Image img1 = icon1.getImage().getScaledInstance(lblChc1.getWidth(), lblChc1.getHeight(), Image.SCALE_DEFAULT);
+        Image img2 = icon2.getImage().getScaledInstance(lblChc2.getWidth(), lblChc2.getHeight(), Image.SCALE_DEFAULT);
+
+        // Assign the character to the correct player
+        if (isPlayer1Turn) {
+            lblChc1.setIcon(new ImageIcon(img1));
+            player1Character = selectedCharacter;
+            player1Picked = true;   // lock Player 1
+            isPlayer1Turn = false;
+        } else {
+            lblChc2.setIcon(new ImageIcon(img2));
+            player2Character = selectedCharacter;
+            player2Picked = true;   // lock Player 2
+            isPlayer1Turn = true;
+        }
+    }
+    
+    
+    
+     /*
+        private void setCharactertoLabel(javax.swing.JLabel lbl, String path){
+        //lblChc2
+        ImageIcon icon = new ImageIcon(getClass().getResource(path));
+        Image img = icon.getImage().getScaledInstance(lbl.getWidth(), lbl.getHeight(), Image.SCALE_DEFAULT);
+        lbl.setIcon(new ImageIcon(img));
+        
+    }
+    
+    */
     
     private void setupCharacterButtons(javax.swing.JButton btn, String characterPath){
         ImageIcon icon = new ImageIcon(getClass().getResource(characterPath));
         Image img = icon.getImage().getScaledInstance(btn.getWidth(), btn.getHeight(), Image.SCALE_DEFAULT);
         btn.setIcon(new ImageIcon(img));
     }
+    
+    
+
     
     private void setupCharacterButtons(){
         
@@ -81,8 +154,8 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
         lblCharacterSelectScreen.setIcon(new ImageIcon(img));
         
         //Character Picks placeholders
-        lblChc1.setBackground(new java.awt.Color(0, 0, 0, 150));
         lblChc2.setBackground(new java.awt.Color(0, 0, 0, 150));
+        lblChc1.setBackground(new java.awt.Color(0, 0, 0, 150));
         
             
      /*   
@@ -284,13 +357,13 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
         lblChc1.setForeground(new java.awt.Color(0, 0, 0));
         lblChc1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 4, true));
         lblChc1.setOpaque(true);
-        pnlPVP.add(lblChc1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 290, 330, 370));
+        pnlPVP.add(lblChc1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 290, 330, 370));
 
         lblChc2.setBackground(new java.awt.Color(68, 68, 68));
         lblChc2.setForeground(new java.awt.Color(0, 0, 0));
         lblChc2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 4, true));
         lblChc2.setOpaque(true);
-        pnlPVP.add(lblChc2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 290, 330, 370));
+        pnlPVP.add(lblChc2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 290, 330, 370));
 
         lblCharacterSelectScreen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Backgrounds/SelectScreenCharacters.png"))); // NOI18N
         pnlPVP.add(lblCharacterSelectScreen, new org.netbeans.lib.awtextra.AbsoluteConstraints(-60, -40, 1980, 1120));
@@ -498,26 +571,32 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
 
     private void btnJordanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJordanActionPerformed
         // TODO add your handling code here:
+       selectCharacter(new AirJordan());
     }//GEN-LAST:event_btnJordanActionPerformed
 
     private void btnKobeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKobeActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new Kowbe());
     }//GEN-LAST:event_btnKobeActionPerformed
 
     private void btnLebronActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLebronActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new Lebrony());
     }//GEN-LAST:event_btnLebronActionPerformed
 
     private void btnLucaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLucaActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new Luca());
     }//GEN-LAST:event_btnLucaActionPerformed
 
     private void btnWembaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWembaActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new Wembymama());
     }//GEN-LAST:event_btnWembaActionPerformed
 
     private void btnJordan1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJordan1ActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnJordan1ActionPerformed
 
     private void btnKobe1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKobe1ActionPerformed
@@ -558,10 +637,12 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
 
     private void btnLarryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLarryActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new LarryBird());
     }//GEN-LAST:event_btnLarryActionPerformed
 
     private void btnShackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShackActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new ShakeroNiel());
     }//GEN-LAST:event_btnShackActionPerformed
 
     private void btnStephActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStephActionPerformed
@@ -589,7 +670,7 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_btnShack1ActionPerformed
 
     private void btnSteph1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSteph1ActionPerformed
-        // TODO add your handling code here:
+        selectCharacter(new ChefCurry());
     }//GEN-LAST:event_btnSteph1ActionPerformed
 
     /**

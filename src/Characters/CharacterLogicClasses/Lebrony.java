@@ -8,6 +8,11 @@ public class Lebrony extends Character {
     public Lebrony() {
         super("Lebrony", "The King", 620, 520);
     }
+    
+    @Override
+    public String getImagePath(){
+        return "/Characters/Lebron/lebron.gif";
+    }
 
     @Override
     public void useSkill1(Character target) {

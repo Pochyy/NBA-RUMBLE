@@ -9,6 +9,11 @@ public class Luca extends Character {
     public Luca() {
         super("Luca", "Magic", 590, 500);
     }
+    
+    @Override
+    public String getImagePath(){
+        return "/Characters/Lebron/lebron.gif";
+    }
 
     @Override
     public void useSkill1(Character target) {

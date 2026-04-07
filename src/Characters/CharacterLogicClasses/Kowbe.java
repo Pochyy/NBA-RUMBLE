@@ -9,6 +9,11 @@ public class Kowbe extends Character {
     public Kowbe() {
         super("Kowbe", "Black Mamba", 590, 620);
     }
+    
+    @Override
+    public String getImagePath(){
+        return "/Characters/Kobe/kowbe.gif";
+    }
 
     @Override
     public void useSkill1(Character target) {

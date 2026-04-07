@@ -8,7 +8,13 @@ public class ChefCurry extends Character {
     public ChefCurry() {
         super("Chef Curry", "Chef Curry", 500, 580);
     }
-
+    
+    @Override
+    public String getImagePath(){
+        return "/Characters/StephenCurry/stephcurry.gif";
+    }
+    //C:\Users\lario\OneDrive\Documents\NetBeansProjects\NBA RUMBLE\src\Characters\StephenCurry\stephcurry.gif
+    
     @Override
     public void useSkill1(Character target) {
         if (!useStamina(35)) return;

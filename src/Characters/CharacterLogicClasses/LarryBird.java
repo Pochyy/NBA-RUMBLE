@@ -8,6 +8,11 @@ public class LarryBird extends Character {
     public LarryBird() {
         super("Larry Bird", "Larry Legend", 520, 420);
     }
+    
+    @Override
+    public String getImagePath(){
+        return "/Characters/LarryBird/larrybird.gif";
+    }
 
     @Override
     public void useSkill1(Character target) {
