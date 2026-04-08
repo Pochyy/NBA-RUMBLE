@@ -6,6 +6,7 @@ package nba.rumble;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import Characters.CharacterLogicClasses.Character;
@@ -25,6 +26,20 @@ import Characters.CharacterLogicClasses.Wembymama;
  */
 public class CharacterSelectScreen extends javax.swing.JFrame {
     
+    private void startFight(){
+       //eyyyy nagamit nako ang katong sleep type shit sa tudlo ni sir khai ;) 
+    javax.swing.Timer timer = new javax.swing.Timer(2000, e -> {
+            
+            FightScreen fightscreen = new FightScreen(player1Character, player2Character); //sends objects to FightScreen they go weeeeeeeeeee
+            fightscreen.setVisible(true); 
+
+            this.dispose(); // Close the current selection screen
+        });
+
+        timer.setRepeats(false); 
+        timer.start();
+    }
+    
     //Panel on Main Menu screen, dictates what panel to show when button is pressed 
     public void showModePanel(String mode){
         pnlPVE.setVisible(false);
@@ -40,18 +55,17 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
     
     private boolean isPlayer1Turn = true; // true = Player 1's turn, false = Player 2's turn
     
-    
+    //Set the characters picked from Player 1 & Player 2
     private Character player1Character;
     private Character player2Character;
     
-
-
+    
+    //Checker if both characters (PVP) has selected.
     private boolean player1Picked = false;
     private boolean player2Picked = false;
     
 
-
-    
+    //Character Selection method.
     private void selectCharacter(Character selectedCharacter) {
         // If it's Player 1's turn but they've already picked, do nothing
         if (isPlayer1Turn && player1Picked) {
@@ -62,11 +76,13 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
         if (!isPlayer1Turn && player2Picked) {
             return;
         }
-
+        
+        //image get path method to all the character classes. 
         String path = selectedCharacter.getImagePath(); 
         ImageIcon icon1 = new ImageIcon(getClass().getResource(path));
         ImageIcon icon2 = new ImageIcon(getClass().getResource(path));
-
+        
+        //adjust gif size to fit label container 
         Image img1 = icon1.getImage().getScaledInstance(lblChc1.getWidth(), lblChc1.getHeight(), Image.SCALE_DEFAULT);
         Image img2 = icon2.getImage().getScaledInstance(lblChc2.getWidth(), lblChc2.getHeight(), Image.SCALE_DEFAULT);
 
@@ -81,8 +97,14 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
             player2Character = selectedCharacter;
             player2Picked = true;   // lock Player 2
             isPlayer1Turn = true;
+            }
+        
+        if(player1Picked && player2Picked){
+            startFight();
+            }
         }
-    }
+        
+        
     
     
     
@@ -753,3 +775,4 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
     private javax.swing.JLabel txtVS1;
     // End of variables declaration//GEN-END:variables
 }
+
