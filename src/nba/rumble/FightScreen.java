@@ -169,6 +169,7 @@ public class FightScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jpPVPScreen = new javax.swing.JPanel();
         pbHealthPlayer1 = new javax.swing.JProgressBar();
         pbStaminaPlayer1 = new javax.swing.JProgressBar();
         pbStaminaPlayer2 = new javax.swing.JProgressBar();
@@ -186,17 +187,19 @@ public class FightScreen extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jpPVPScreen.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         pbHealthPlayer1.setStringPainted(true);
-        getContentPane().add(pbHealthPlayer1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, 400, 60));
+        jpPVPScreen.add(pbHealthPlayer1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, 400, 60));
 
         pbStaminaPlayer1.setStringPainted(true);
-        getContentPane().add(pbStaminaPlayer1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 120, 400, 60));
+        jpPVPScreen.add(pbStaminaPlayer1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 120, 400, 60));
 
         pbStaminaPlayer2.setStringPainted(true);
-        getContentPane().add(pbStaminaPlayer2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 120, 400, 60));
+        jpPVPScreen.add(pbStaminaPlayer2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 120, 400, 60));
 
         pbHealthPlayer2.setStringPainted(true);
-        getContentPane().add(pbHealthPlayer2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 50, 400, 60));
+        jpPVPScreen.add(pbHealthPlayer2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 50, 400, 60));
 
         btnSkill1Player1.setText("Skill 1");
         btnSkill1Player1.addActionListener(new java.awt.event.ActionListener() {
@@ -204,7 +207,7 @@ public class FightScreen extends javax.swing.JFrame {
                 btnSkill1Player1ActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSkill1Player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 830, 120, 90));
+        jpPVPScreen.add(btnSkill1Player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 830, 120, 90));
 
         btnSkill3Player1.setText("Skill 3");
         btnSkill3Player1.addActionListener(new java.awt.event.ActionListener() {
@@ -212,7 +215,7 @@ public class FightScreen extends javax.swing.JFrame {
                 btnSkill3Player1ActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSkill3Player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 830, 120, 90));
+        jpPVPScreen.add(btnSkill3Player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 830, 120, 90));
 
         btnSkill2Player1.setText("Skill 2");
         btnSkill2Player1.addActionListener(new java.awt.event.ActionListener() {
@@ -220,7 +223,7 @@ public class FightScreen extends javax.swing.JFrame {
                 btnSkill2Player1ActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSkill2Player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 830, 120, 90));
+        jpPVPScreen.add(btnSkill2Player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 830, 120, 90));
 
         btnSkill1Player2.setText("Skill 1");
         btnSkill1Player2.addActionListener(new java.awt.event.ActionListener() {
@@ -228,7 +231,7 @@ public class FightScreen extends javax.swing.JFrame {
                 btnSkill1Player2ActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSkill1Player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1120, 830, 120, 90));
+        jpPVPScreen.add(btnSkill1Player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1120, 830, 120, 90));
 
         btnSkill2Player2.setText("Skill 2");
         btnSkill2Player2.addActionListener(new java.awt.event.ActionListener() {
@@ -236,7 +239,7 @@ public class FightScreen extends javax.swing.JFrame {
                 btnSkill2Player2ActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSkill2Player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1260, 830, 120, 90));
+        jpPVPScreen.add(btnSkill2Player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1260, 830, 120, 90));
 
         btnSkill3Player2.setText("Skill 3");
         btnSkill3Player2.addActionListener(new java.awt.event.ActionListener() {
@@ -244,16 +247,18 @@ public class FightScreen extends javax.swing.JFrame {
                 btnSkill3Player2ActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSkill3Player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1400, 830, 120, 90));
+        jpPVPScreen.add(btnSkill3Player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1400, 830, 120, 90));
 
         lblPlayer1Character.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
-        getContentPane().add(lblPlayer1Character, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 260, 440, 430));
+        jpPVPScreen.add(lblPlayer1Character, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 260, 440, 430));
 
         lblPlayer2Character.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
-        getContentPane().add(lblPlayer2Character, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 260, 440, 430));
+        jpPVPScreen.add(lblPlayer2Character, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 260, 440, 430));
 
         lblBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Backgrounds/SelectScreenCharacters.png"))); // NOI18N
-        getContentPane().add(lblBackground, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1920, 1080));
+        jpPVPScreen.add(lblBackground, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1920, 1080));
+
+        getContentPane().add(jpPVPScreen, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -354,6 +359,7 @@ public class FightScreen extends javax.swing.JFrame {
     private javax.swing.JButton btnSkill2Player2;
     private javax.swing.JButton btnSkill3Player1;
     private javax.swing.JButton btnSkill3Player2;
+    private javax.swing.JPanel jpPVPScreen;
     private javax.swing.JLabel lblBackground;
     private javax.swing.JLabel lblPlayer1Character;
     private javax.swing.JLabel lblPlayer2Character;
