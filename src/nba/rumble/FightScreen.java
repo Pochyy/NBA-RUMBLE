@@ -13,6 +13,9 @@ import Characters.CharacterLogicClasses.Character;
  */
 public class FightScreen extends javax.swing.JFrame {
     
+    private int p1RoundWins = 0; //Round Counters
+    private int p2RoundWins = 0;
+    
     private Character player1Character;
     private Character player2Character;
     
@@ -42,7 +45,14 @@ public class FightScreen extends javax.swing.JFrame {
         pbStaminaPlayer2.setMaximum(player2Character.getMaxStamina());
         pbStaminaPlayer2.setValue(player2Character.getStamina());
         
+        
+        toggleButtons(); // Ensures P1 starts enabled and P2 starts disabled
    
+    }
+    
+    public FightScreen() {
+        initComponents();
+
     }
     
     /**
@@ -63,6 +73,8 @@ public class FightScreen extends javax.swing.JFrame {
         pbHealthPlayer2.setValue(player2Character.getHp());
         pbStaminaPlayer2.setValue(player2Character.getStamina());
         
+        // CHECK IF SOMEONE DIED
+        checkGameOver();
         
     }
     private void setCharacterImages() {
@@ -76,12 +88,78 @@ public class FightScreen extends javax.swing.JFrame {
     }
     
     
-    public FightScreen() {
-        initComponents();
+    private void toggleButtons() {
+        // Player 1's buttons are active ONLY if it is Player 1's turn
+        btnSkill1Player1.setEnabled(isPlayer1Turn);
+        btnSkill2Player1.setEnabled(isPlayer1Turn);
+        btnSkill3Player1.setEnabled(isPlayer1Turn);
 
-        
+        // Player 2's buttons are active ONLY if it is NOT Player 1's turn
+        btnSkill1Player2.setEnabled(!isPlayer1Turn);
+        btnSkill2Player2.setEnabled(!isPlayer1Turn);
+        btnSkill3Player2.setEnabled(!isPlayer1Turn);
+    }
+    
+    private void checkGameOver() {
+        if (player1Character.getHp() <= 0) {
+            p2RoundWins++;
+            processRoundEnd("PLAYER 2 WINS THE ROUND!");
+        } else if (player2Character.getHp() <= 0) {
+            p1RoundWins++;
+            processRoundEnd("PLAYER 1 WINS THE ROUND!");
+        }
     }
 
+    private void processRoundEnd(String message) {
+        // 1. Show who won the round
+        javax.swing.JOptionPane.showMessageDialog(this, message + "\nScore: P1 [" + p1RoundWins + "] - P2 [" + p2RoundWins + "]");
+
+        // 2. Check if someone won the whole Match (Best of 3 = 2 wins)
+        if (p1RoundWins == 2) {
+            javax.swing.JOptionPane.showMessageDialog(this, "CONGRATULATIONS: PLAYER 1 IS THE CHAMPION!");
+            endMatch();
+        } else if (p2RoundWins == 2) {
+            javax.swing.JOptionPane.showMessageDialog(this, "CONGRATULATIONS: PLAYER 2 IS THE CHAMPION!");
+            endMatch();
+        } else {
+            // 3. If no one has 2 wins, reset for the next round
+            resetRound();
+        }
+    }
+    
+    private void resetRound() {
+        // Restore HP and Stamina to max
+        player1Character.resetStats();
+        player2Character.resetStats();
+
+        // Refresh the progress bars
+        updateBars();
+
+        // Optional: Reset turn to Player 1 every new round
+        isPlayer1Turn = true;
+        toggleButtons();      // Apply button states
+        updateBars();
+    }
+
+    
+    private void endMatch() {
+        // This takes the player back to the selection screen or menu
+        new MenuScreen().setVisible(true);
+        this.dispose();
+    }
+    
+    // if ganahan mo mag disable ug controls, turn off comments and use this
+//    private void disableControls() {
+//    btnSkill1Player1.setEnabled(false);
+//    btnSkill2Player1.setEnabled(false);
+//    btnSkill3Player1.setEnabled(false);
+//    btnSkill1Player2.setEnabled(false);
+//    btnSkill2Player2.setEnabled(false);
+//    btnSkill3Player2.setEnabled(false);
+//}
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -189,36 +267,54 @@ public class FightScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
         player1Character.useSkill1(player2Character);
         updateBars();
+        
+        isPlayer1Turn = false; // Switch to Player 2
+        toggleButtons();       // Update the buttons
     }//GEN-LAST:event_btnSkill1Player1ActionPerformed
 
     private void btnSkill3Player1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill3Player1ActionPerformed
         // TODO add your handling code here:
        player1Character.useSkill3(player2Character);
         updateBars();
+        
+        isPlayer1Turn = false; // Switch to Player 2
+        toggleButtons();       // Update the buttons
     }//GEN-LAST:event_btnSkill3Player1ActionPerformed
 
     private void btnSkill2Player1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill2Player1ActionPerformed
         // TODO add your handling code here:
         player1Character.useSkill2(player2Character);
         updateBars();
+        
+        isPlayer1Turn = false; // Switch to Player 2
+        toggleButtons();       // Update the buttons
     }//GEN-LAST:event_btnSkill2Player1ActionPerformed
 
     private void btnSkill1Player2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill1Player2ActionPerformed
         // TODO add your handling code here:
         player2Character.useSkill1(player1Character);
         updateBars();
+        
+        isPlayer1Turn = true; // Switch to Player 1
+        toggleButtons();       // Update the buttons
     }//GEN-LAST:event_btnSkill1Player2ActionPerformed
 
     private void btnSkill2Player2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill2Player2ActionPerformed
         // TODO add your handling code here:
         player2Character.useSkill2(player1Character);
         updateBars();
+        
+        isPlayer1Turn = true; // Switch to Player 1
+        toggleButtons();       // Update the buttons
     }//GEN-LAST:event_btnSkill2Player2ActionPerformed
 
     private void btnSkill3Player2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill3Player2ActionPerformed
         // TODO add your handling code here:
         player2Character.useSkill3(player1Character);
         updateBars();
+        
+        isPlayer1Turn = true; // Switch to Player 1
+        toggleButtons();       // Update the buttons
     }//GEN-LAST:event_btnSkill3Player2ActionPerformed
 
     /**

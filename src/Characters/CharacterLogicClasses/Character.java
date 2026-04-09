@@ -21,6 +21,16 @@ public abstract class Character {
         this.totalHealingReceived = 0;
     }
     
+    //PRIME'S CHANGES INSIDE CHARACTER CLASS: setHP, setStamina
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
+    public void setStamina(int stamina) {
+        this.stamina = stamina;
+    }
+    
+    
     public abstract String getImagePath();
 
     public void takeDamage(int damage) {
