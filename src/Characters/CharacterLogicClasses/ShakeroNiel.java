@@ -75,17 +75,20 @@ public class ShakeroNiel extends Character {
 
     @Override 
     public String getSkill1Name() { 
-        return "Power Dunk (Damage 30-50)"; 
+        return "Power Dunk"; 
+        //return "Power Dunk (Damage 30-50)"; 
     }
     
     @Override 
     public String getSkill2Name() { 
-        return "Earthquake Slam (Damage 35-60)"; 
+        return "Earthquake Slam";
+        //return "Earthquake Slam (Damage 35-60)"; 
     }
     
     @Override 
     public String getSkill3Name() { 
-        return "Groundbreaker Mode (Damage 100-160, +45 Damage for 3 turns, Heal 60)"; 
+        return "Groundbreaker Mode"; 
+        //return "Groundbreaker Mode (Damage 100-160, +45 Damage for 3 turns, Heal 60)"; 
     }
     
     @Override 

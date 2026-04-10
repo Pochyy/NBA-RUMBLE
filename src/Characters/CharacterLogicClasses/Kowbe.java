@@ -68,17 +68,20 @@ public class Kowbe extends Character {
 
     @Override 
     public String getSkill1Name() { 
-        return "Post Up Smack (Damage 45-70)"; 
+        return "Post Up Smack"; 
+        //return "Post Up Smack"; 
     }
     
     @Override 
     public String getSkill2Name() { 
-        return "Post Up Tackle (Damage 70-90)"; 
+        return "Post Up Tackle"; 
+        //return "Post Up Tackle (Damage 70-90)"; 
     }
     
     @Override 
     public String getSkill3Name() { 
-        return "InYoFace Fadeaway (Damage 110-190, +35 damage to next 2 attacks)"; 
+        return "InYoFace Fadeaway"; 
+        //return "InYoFace Fadeaway (Damage 110-190, +35 damage to next 2 attacks)"; 
     }
     
     @Override 

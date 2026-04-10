@@ -49,17 +49,20 @@ public class LarryBird extends Character {
 
     @Override 
     public String getSkill1Name() { 
-        return "Deadeye Jumper (Damage 45-70)"; 
+        return "Deadeye Jumper"; 
+        //return "Deadeye Jumper (Damage 45-70)"; 
     }
     
     @Override 
     public String getSkill2Name() { 
-        return "Court Vision (Damage 35-55)"; 
+        return "Court Vision"; 
+        //return "Court Vision (Damage 35-55)"; 
     }
     
     @Override 
     public String getSkill3Name() { 
-        return "Clutch Assassin (Damage 90-130, 1.5x if HP < 30%)"; 
+        return "Clutch Assassin"; 
+        //return "Clutch Assassin (Damage 90-130, 1.5x if HP < 30%)"; 
     }
     
     @Override 

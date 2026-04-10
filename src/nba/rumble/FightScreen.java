@@ -26,6 +26,7 @@ public class FightScreen extends javax.swing.JFrame {
         this.player2Character = p2;
         
         setCharacterImages();
+        setSkillNames();
         
         //Player 1 stats.
         //Set Health value for the Health Bar
@@ -58,6 +59,18 @@ public class FightScreen extends javax.swing.JFrame {
     /**
      * Creates new form FightScreen
      */
+    
+    private void setSkillNames() {
+    // Player 1 buttons
+    btnSkill1Player1.setText(player1Character.getSkill1Name());
+    btnSkill2Player1.setText(player1Character.getSkill2Name());
+    btnSkill3Player1.setText(player1Character.getSkill3Name());
+
+    // Player 2 buttons
+    btnSkill1Player2.setText(player2Character.getSkill1Name());
+    btnSkill2Player2.setText(player2Character.getSkill2Name());
+    btnSkill3Player2.setText(player2Character.getSkill3Name());
+}
     
     private boolean isPlayer1Turn = true;
     
@@ -170,6 +183,10 @@ public class FightScreen extends javax.swing.JFrame {
     private void initComponents() {
 
         jpPVPScreen = new javax.swing.JPanel();
+        lblPlayer1HealthBar = new javax.swing.JLabel();
+        lblPlayer2HealthBar = new javax.swing.JLabel();
+        lblPlayer1StaminaBar = new javax.swing.JLabel();
+        lblPlayer2StaminaBar = new javax.swing.JLabel();
         pbHealthPlayer1 = new javax.swing.JProgressBar();
         pbStaminaPlayer1 = new javax.swing.JProgressBar();
         pbStaminaPlayer2 = new javax.swing.JProgressBar();
@@ -189,65 +206,113 @@ public class FightScreen extends javax.swing.JFrame {
 
         jpPVPScreen.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        lblPlayer1HealthBar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/healthBarNStaminaBar.png"))); // NOI18N
+        jpPVPScreen.add(lblPlayer1HealthBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, 400, 60));
+
+        lblPlayer2HealthBar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/healthBarNStaminaBar.png"))); // NOI18N
+        jpPVPScreen.add(lblPlayer2HealthBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 50, 400, 60));
+
+        lblPlayer1StaminaBar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/healthBarNStaminaBar.png"))); // NOI18N
+        jpPVPScreen.add(lblPlayer1StaminaBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 120, 400, 60));
+
+        lblPlayer2StaminaBar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/healthBarNStaminaBar.png"))); // NOI18N
+        jpPVPScreen.add(lblPlayer2StaminaBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 120, 400, 60));
+
+        pbHealthPlayer1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        pbHealthPlayer1.setForeground(new java.awt.Color(255, 255, 255));
+        pbHealthPlayer1.setString("Health");
         pbHealthPlayer1.setStringPainted(true);
         jpPVPScreen.add(pbHealthPlayer1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, 400, 60));
 
+        pbStaminaPlayer1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        pbStaminaPlayer1.setForeground(new java.awt.Color(255, 255, 255));
+        pbStaminaPlayer1.setString("Stamina");
         pbStaminaPlayer1.setStringPainted(true);
         jpPVPScreen.add(pbStaminaPlayer1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 120, 400, 60));
 
+        pbStaminaPlayer2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        pbStaminaPlayer2.setForeground(new java.awt.Color(255, 255, 255));
+        pbStaminaPlayer2.setString("Stamina");
         pbStaminaPlayer2.setStringPainted(true);
         jpPVPScreen.add(pbStaminaPlayer2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 120, 400, 60));
 
+        pbHealthPlayer2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        pbHealthPlayer2.setForeground(new java.awt.Color(255, 255, 255));
+        pbHealthPlayer2.setString("Health");
         pbHealthPlayer2.setStringPainted(true);
         jpPVPScreen.add(pbHealthPlayer2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 50, 400, 60));
 
+        btnSkill1Player1.setBackground(new java.awt.Color(255, 255, 255));
+        btnSkill1Player1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSkill1Player1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/skillplaceholder.png"))); // NOI18N
         btnSkill1Player1.setText("Skill 1");
+        btnSkill1Player1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSkill1Player1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSkill1Player1ActionPerformed(evt);
             }
         });
-        jpPVPScreen.add(btnSkill1Player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 830, 120, 90));
+        jpPVPScreen.add(btnSkill1Player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 830, 140, 110));
 
+        btnSkill3Player1.setBackground(new java.awt.Color(255, 255, 255));
+        btnSkill3Player1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSkill3Player1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/skillplaceholder.png"))); // NOI18N
         btnSkill3Player1.setText("Skill 3");
+        btnSkill3Player1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSkill3Player1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSkill3Player1ActionPerformed(evt);
             }
         });
-        jpPVPScreen.add(btnSkill3Player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 830, 120, 90));
+        jpPVPScreen.add(btnSkill3Player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 830, 140, 110));
 
+        btnSkill2Player1.setBackground(new java.awt.Color(255, 255, 255));
+        btnSkill2Player1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSkill2Player1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/skillplaceholder.png"))); // NOI18N
         btnSkill2Player1.setText("Skill 2");
+        btnSkill2Player1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSkill2Player1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSkill2Player1ActionPerformed(evt);
             }
         });
-        jpPVPScreen.add(btnSkill2Player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 830, 120, 90));
+        jpPVPScreen.add(btnSkill2Player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 830, 140, 110));
 
+        btnSkill1Player2.setBackground(new java.awt.Color(255, 255, 255));
+        btnSkill1Player2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSkill1Player2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/skillplaceholder.png"))); // NOI18N
         btnSkill1Player2.setText("Skill 1");
+        btnSkill1Player2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSkill1Player2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSkill1Player2ActionPerformed(evt);
             }
         });
-        jpPVPScreen.add(btnSkill1Player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1120, 830, 120, 90));
+        jpPVPScreen.add(btnSkill1Player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1120, 830, 140, 110));
 
+        btnSkill2Player2.setBackground(new java.awt.Color(255, 255, 255));
+        btnSkill2Player2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSkill2Player2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/skillplaceholder.png"))); // NOI18N
         btnSkill2Player2.setText("Skill 2");
+        btnSkill2Player2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSkill2Player2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSkill2Player2ActionPerformed(evt);
             }
         });
-        jpPVPScreen.add(btnSkill2Player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1260, 830, 120, 90));
+        jpPVPScreen.add(btnSkill2Player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1260, 830, 140, 110));
 
+        btnSkill3Player2.setBackground(new java.awt.Color(255, 255, 255));
+        btnSkill3Player2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSkill3Player2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/skillplaceholder.png"))); // NOI18N
         btnSkill3Player2.setText("Skill 3");
+        btnSkill3Player2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSkill3Player2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSkill3Player2ActionPerformed(evt);
             }
         });
-        jpPVPScreen.add(btnSkill3Player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1400, 830, 120, 90));
+        jpPVPScreen.add(btnSkill3Player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1400, 830, 140, 110));
 
         lblPlayer1Character.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
         jpPVPScreen.add(lblPlayer1Character, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 260, 440, 430));
@@ -362,7 +427,11 @@ public class FightScreen extends javax.swing.JFrame {
     private javax.swing.JPanel jpPVPScreen;
     private javax.swing.JLabel lblBackground;
     private javax.swing.JLabel lblPlayer1Character;
+    private javax.swing.JLabel lblPlayer1HealthBar;
+    private javax.swing.JLabel lblPlayer1StaminaBar;
     private javax.swing.JLabel lblPlayer2Character;
+    private javax.swing.JLabel lblPlayer2HealthBar;
+    private javax.swing.JLabel lblPlayer2StaminaBar;
     private javax.swing.JProgressBar pbHealthPlayer1;
     private javax.swing.JProgressBar pbHealthPlayer2;
     private javax.swing.JProgressBar pbStaminaPlayer1;
