@@ -12,7 +12,8 @@ public class Luca extends Character {
     
     @Override
     public String getImagePath(){
-        return "/Characters/Lebron/lebron.gif";
+        return "/Characters/Luca/luka.gif"; 
+        
     }
 
     @Override

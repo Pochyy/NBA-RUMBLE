@@ -24,7 +24,13 @@ import Characters.CharacterLogicClasses.Wembymama;
  *
  * @author lario
  */
+
+
+
 public class CharacterSelectScreen extends javax.swing.JFrame {
+
+    // true = Bot picks itself, false = Player picks for Bot
+    private boolean doesBotPickRandom = true;
     
     private void startFight(){
        //eyyyy nagamit nako ang katong sleep type shit sa tudlo ni sir khai ;) 
@@ -48,8 +54,37 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
         
         switch(mode){
             case"PVP" -> pnlPVP.setVisible(true);
-            case"PVE" -> pnlPVE.setVisible(true);
             case"Arcade" -> pnlArcade.setVisible(true);
+            case"PVE" -> /*pnlPVE.setVisible(true); OLD CODE*/
+                
+//                NEWER CODE FOR BOT IMPLEMENTATION
+//                POP UP SCREEN FOR PVE (Prime's Part)           
+                
+        {
+            pnlPVE.setVisible(true);
+            
+            // --- POP-UP LOGIC START ---
+            Object[] options = {"Random Bot", "I'll Pick for Bot"};
+            int choice = javax.swing.JOptionPane.showOptionDialog(this,
+                    "How should the Bot select its character?",
+                    "PVE Mode Setup",
+                    javax.swing.JOptionPane.YES_NO_OPTION,
+                    javax.swing.JOptionPane.QUESTION_MESSAGE,
+                    null, options, options[0]);
+
+            // If user clicks "Random Bot" (index 0)
+            if (choice == 0) {
+                doesBotPickRandom = true;
+                // Optional: Show a little notification
+                System.out.println("Mode: Random AI enabled");
+            } else {
+                doesBotPickRandom = false;
+                System.out.println("Mode: Manual selection enabled");
+            }
+            // --- POP-UP LOGIC END ---
+        }
+//              POP-UP SCREEN LOGIC CODE ENDS HERE (Prime)
+        
         }
     }
     
@@ -68,42 +103,154 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
     //Character Selection method.
     private void selectCharacter(Character selectedCharacter) {
         // If it's Player 1's turn but they've already picked, do nothing
-        if (isPlayer1Turn && player1Picked) {
-            return;
-        }
-
-        // If it's Player 2's turn but they've already picked, do nothing
-        if (!isPlayer1Turn && player2Picked) {
-            return;
-        }
         
-        //image get path method to all the character classes. 
-        String path = selectedCharacter.getImagePath(); 
-        ImageIcon icon1 = new ImageIcon(getClass().getResource(path));
-        ImageIcon icon2 = new ImageIcon(getClass().getResource(path));
+        // safety check if something unexpected happened in this method
+        if (isPlayer1Turn && player1Picked) return;
+        if (!isPlayer1Turn && player2Picked) return;
         
-        //adjust gif size to fit label container 
-        Image img1 = icon1.getImage().getScaledInstance(lblChc1.getWidth(), lblChc1.getHeight(), Image.SCALE_DEFAULT);
-        Image img2 = icon2.getImage().getScaledInstance(lblChc2.getWidth(), lblChc2.getHeight(), Image.SCALE_DEFAULT);
+        // loading & preparing images 
+        //image get path method to all the character classes. *updated by PRIME.*
+        String path = selectedCharacter.getImagePath();
+        ImageIcon icon = new ImageIcon(getClass().getResource(path));
+        
+        
+        // ADD PANEL LOGIC 
+        //PVE MODE (PRIME'S PART)
+        if (pnlPVE.isVisible()) {
+            if (isPlayer1Turn) {
+                // Player 1 picks their own character
+                Image img = icon.getImage().getScaledInstance(lblChc4.getWidth(), lblChc4.getHeight(), Image.SCALE_DEFAULT);
+                lblChc4.setIcon(new ImageIcon(img));
+                player1Character = selectedCharacter;
+                player1Picked = true;
 
-        // Assign the character to the correct player
+                if (doesBotPickRandom) {
+                    // OPTION A: AI picks automatically after 2 seconds
+                    pickRandomBotCharacter(); 
+                } else {
+                    // OPTION B: Wait for Player 1 to pick for the Bot
+                    isPlayer1Turn = false; // Switch turn so the next click counts as Player 2
+                }
+            } else {
+                // This part runs ONLY if isBotRandom is false (Manual Pick)
+                Image img = icon.getImage().getScaledInstance(lblChc3.getWidth(), lblChc3.getHeight(), Image.SCALE_DEFAULT);
+                lblChc3.setIcon(new ImageIcon(img));
+                player2Character = selectedCharacter;
+                player2Picked = true;
+        }
+            
+//        // --- PVE LOGIC ---
+//        // Player 1 picks, then Bot auto-picks
+//        Image img = icon.getImage().getScaledInstance(lblChc4.getWidth(), lblChc4.getHeight(), Image.SCALE_DEFAULT);
+//        lblChc4.setIcon(new ImageIcon(img));
+//        player1Character = selectedCharacter;
+//        player1Picked = true;
+//
+//        // Trigger the Bot immediately
+//        pickRandomBotCharacter(); 
+
+        } else {
+        // --- PVP MODE (VINZ'S PART, updated) ---
         if (isPlayer1Turn) {
+            Image img1 = icon.getImage().getScaledInstance(lblChc1.getWidth(), lblChc1.getHeight(), Image.SCALE_DEFAULT);
             lblChc1.setIcon(new ImageIcon(img1));
             player1Character = selectedCharacter;
-            player1Picked = true;   // lock Player 1
-            isPlayer1Turn = false;
+            player1Picked = true;
+            isPlayer1Turn = false; // Switch turn to Player 2
         } else {
+            Image img2 = icon.getImage().getScaledInstance(lblChc2.getWidth(), lblChc2.getHeight(), Image.SCALE_DEFAULT);
             lblChc2.setIcon(new ImageIcon(img2));
             player2Character = selectedCharacter;
-            player2Picked = true;   // lock Player 2
-            isPlayer1Turn = true;
-            }
-        
-        if(player1Picked && player2Picked){
-            startFight();
-            }
+            player2Picked = true;
         }
         
+        //ALL APPLIED CHANGES EXPLANATION:
+        //getScaledInstance() = nakadynamic siyag adjust sa width/height sa active panel
+        //player1Character and player2Character are still being filled with the "selectedCharacter" object.
+        //player1picked1 = true && player1picked1 = true == LOCK LOGIC STILL IMPLEMENTED
+        //safety checks are also implemented if ever naay bugs sa game
+        // -> if (isPlayer1Turn && player1Picked) return;  <-
+        // -> if (!isPlayer1Turn && player2Picked) return; <-
+ 
+    }
+
+    // 4. TRANSITION LOGIC (Still present)
+    if (player1Picked && player2Picked) {
+        startFight();
+    }
+}
+        
+
+//// vinz's old part (check for review lng nga walay nangawala nga logics and compare it to the updated logic. thanks.) 
+
+//        //image get path method to all the character classes. 
+//        ImageIcon icon1 = new ImageIcon(getClass().getResource(path));
+//        ImageIcon icon2 = new ImageIcon(getClass().getResource(path));
+//        
+//        //adjust gif size to fit label container 
+//        Image img1 = icon1.getImage().getScaledInstance(lblChc1.getWidth(), lblChc1.getHeight(), Image.SCALE_DEFAULT);
+//        Image img2 = icon2.getImage().getScaledInstance(lblChc2.getWidth(), lblChc2.getHeight(), Image.SCALE_DEFAULT);
+//
+//        // Assign the character to the correct player
+//        if (isPlayer1Turn) {
+//            lblChc1.setIcon(new ImageIcon(img1));
+//            player1Character = selectedCharacter;
+//            player1Picked = true;   // lock Player 1
+//            isPlayer1Turn = false;
+//        } else {
+//            lblChc2.setIcon(new ImageIcon(img2));
+//            player2Character = selectedCharacter;
+//            player2Picked = true;   // lock Player 2
+//            isPlayer1Turn = true;
+//            }
+//        
+//        if(player1Picked && player2Picked){
+//            startFight();
+//            }
+//        }
+    
+    
+    //BOT BEHAVIORS FOR PVE 
+    private void pickRandomBotCharacter() {
+        // THIS CODE is to create the Timer with a 2000ms (2 second) delay for the Bot
+        javax.swing.Timer botTimer = new javax.swing.Timer(2000, e -> {
+        Character[] options = {new AirJordan(), new Kowbe(), new Lebrony(), new Luca(), new Wembymama()};
+        int random = (int)(Math.random() * options.length);
+    
+        //BOT'S SELECTION
+        player2Character = options[random];
+
+        // Scale and set the image for the Bot Label
+        ImageIcon botIcon = new ImageIcon(getClass().getResource(player2Character.getImagePath()));
+        Image img = botIcon.getImage().getScaledInstance(lblChc3.getWidth(), lblChc3.getHeight(), Image.SCALE_DEFAULT);
+        lblChc3.setIcon(new ImageIcon(img));
+
+        player2Picked = true;
+        
+        // Check if we should start the fight (since player1 already picked)
+        if (player1Picked && player2Picked) {
+            startFight();
+        }
+    });
+
+        botTimer.setRepeats(false); // Only run once
+        botTimer.start();
+    
+        //OLD CODE, might come in handy later
+//        Character[] options = {new AirJordan(), new Kowbe(), new Lebrony(), new Luca(), new Wembymama()};
+//        int random = (int)(Math.random() * options.length);
+//    
+//        player2Character = options[random];
+//
+//        // Scale for Bot Label (lblChc3)
+//        ImageIcon botIcon = new ImageIcon(getClass().getResource(player2Character.getImagePath()));
+//        Image img = botIcon.getImage().getScaledInstance(lblChc3.getWidth(), lblChc3.getHeight(), Image.SCALE_DEFAULT);
+//        lblChc3.setIcon(new ImageIcon(img));
+//
+//        player2Picked = true;
+
+
+    }
         
     
     
@@ -168,8 +315,7 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
      */
     public CharacterSelectScreen() {
         initComponents();
-        
-       setupCharacterButtons();
+        setupCharacterButtons();
         
         ImageIcon pic = new ImageIcon(getClass().getResource("/Backgrounds/SelectScreenCharacters.png"));
         Image img = pic.getImage().getScaledInstance(lblCharacterSelectScreen.getWidth(), lblCharacterSelectScreen.getHeight(), Image.SCALE_DEFAULT);
@@ -618,43 +764,52 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
 
     private void btnJordan1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJordan1ActionPerformed
         // TODO add your handling code here:
-        
+        selectCharacter(new AirJordan());
     }//GEN-LAST:event_btnJordan1ActionPerformed
 
     private void btnKobe1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKobe1ActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new Kowbe());
     }//GEN-LAST:event_btnKobe1ActionPerformed
 
     private void btnLebron1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLebron1ActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new Lebrony());
     }//GEN-LAST:event_btnLebron1ActionPerformed
 
     private void btnLuca1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLuca1ActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new Luca());
     }//GEN-LAST:event_btnLuca1ActionPerformed
 
     private void btnWemba1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWemba1ActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new Wembymama());
     }//GEN-LAST:event_btnWemba1ActionPerformed
 
     private void btnJordan2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJordan2ActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new AirJordan());
     }//GEN-LAST:event_btnJordan2ActionPerformed
 
     private void btnKobe2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKobe2ActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new Kowbe());
     }//GEN-LAST:event_btnKobe2ActionPerformed
 
     private void btnLebron2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLebron2ActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new Lebrony());
     }//GEN-LAST:event_btnLebron2ActionPerformed
 
     private void btnLuca2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLuca2ActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new Luca());
     }//GEN-LAST:event_btnLuca2ActionPerformed
 
     private void btnWemba2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWemba2ActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new Wembymama());
     }//GEN-LAST:event_btnWemba2ActionPerformed
 
     private void btnLarryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLarryActionPerformed
@@ -669,32 +824,39 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
 
     private void btnStephActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStephActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new ChefCurry());
     }//GEN-LAST:event_btnStephActionPerformed
 
     private void btnLarry2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLarry2ActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new LarryBird());
     }//GEN-LAST:event_btnLarry2ActionPerformed
 
     private void btnShack2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShack2ActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new ShakeroNiel());
     }//GEN-LAST:event_btnShack2ActionPerformed
 
     private void btnSteph2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSteph2ActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new ChefCurry());
     }//GEN-LAST:event_btnSteph2ActionPerformed
 
     private void btnLarry1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLarry1ActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new LarryBird());
     }//GEN-LAST:event_btnLarry1ActionPerformed
 
     private void btnShack1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShack1ActionPerformed
         // TODO add your handling code here:
+        selectCharacter(new ShakeroNiel());
     }//GEN-LAST:event_btnShack1ActionPerformed
 
     private void btnSteph1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSteph1ActionPerformed
         selectCharacter(new ChefCurry());
     }//GEN-LAST:event_btnSteph1ActionPerformed
 
+    
     /**
      * @param args the command line arguments
      */
