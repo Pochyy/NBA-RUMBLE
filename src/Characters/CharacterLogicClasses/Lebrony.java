@@ -49,17 +49,20 @@ public class Lebrony extends Character {
 
     @Override 
     public String getSkill1Name() { 
-        return "Playmaker Prodigy (Damage 55-80)"; 
+        return "Playmaker Prodigy"; 
+        //return "Playmaker Prodigy (Damage 55-80)"; 
     }
     
     @Override 
     public String getSkill2Name() { 
-        return "King's Iron Block (Damage 80-110)"; 
+        return "King's Iron Block"; 
+        //return "King's Iron Block (Damage 80-110)"; 
     }
     
     @Override 
     public String getSkill3Name() { 
-        return "The Crowned Dime (Damage 95-140, 65% chance for follow-up attack)"; 
+        return "The Crowned Dime"; 
+        //return "The Crowned Dime (Damage 95-140, 65% chance for follow-up attack)"; 
     }
     
     @Override 

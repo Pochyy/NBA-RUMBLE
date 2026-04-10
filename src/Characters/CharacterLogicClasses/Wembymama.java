@@ -49,17 +49,20 @@ public class Wembymama extends Character {
 
     @Override 
     public String getSkill1Name() { 
-        return "Deep Range Three (Damage 45-70)"; 
+        return "Deep Range Three"; 
+        //return "Deep Range Three (Damage 45-70)"; 
     }
     
     @Override 
     public String getSkill2Name() { 
-        return "One-Hand Slam (Damage 70-100)"; 
+        return "One-Hand Slam"; 
+        //return "One-Hand Slam (Damage 70-100)"; 
     }
     
     @Override 
     public String getSkill3Name() { 
-        return "Celestial Slam (Damage 100-160, 30% chance +25 damage)"; 
+        return "Celestial Slam";
+        //return "Celestial Slam (Damage 100-160, 30% chance +25 damage)"; 
     }
     
     @Override 

@@ -48,17 +48,20 @@ public class AirJordan extends Character {
 
     @Override 
     public String getSkill1Name() { 
-        return "Floating Jumper (Damage 50-70)"; 
+        return "Floating Jumper"; 
+        //return "Floating Jumper (Damage 50-70)"; 
     }
     
     @Override 
     public String getSkill2Name() { 
-        return "Air Dunk (Damage 75-100)"; 
+        return "Air Dunk"; 
+        //return "Air Dunk (Damage 75-100)"; 
     }
     
     @Override 
     public String getSkill3Name() { 
-        return "Goated Staredown (Damage 140-200, 65% chance: +70 Stamina)"; 
+        return "Goated Staredown"; 
+        //return "Goated Staredown (Damage 140-200, 65% chance: +70 Stamina)"; 
     }
     
     @Override 

@@ -69,17 +69,20 @@ public class Luca extends Character {
 
     @Override 
     public String getSkill1Name() { 
-        return "Stepback Dagger (Damage 50-75)"; 
+        return "Stepback Dagger"; 
+        //return "Stepback Dagger (Damage 50-75)"; 
     }
     
     @Override 
     public String getSkill2Name() { 
-        return "No-Look Nightmare (Damage 65-90)"; 
+        return "No-Look Nightmare"; 
+        //return "No-Look Nightmare (Damage 65-90)";
     }
     
     @Override 
     public String getSkill3Name() { 
-        return "Too Small Finisher (Damage 125-185, +40 damage to next 2 attacks)"; 
+        return "Too Small Finisher"; 
+        //return "Too Small Finisher (Damage 125-185, +40 damage to next 2 attacks)"; 
     }
     
     @Override 

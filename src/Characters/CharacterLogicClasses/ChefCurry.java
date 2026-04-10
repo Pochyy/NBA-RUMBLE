@@ -50,17 +50,20 @@ public class ChefCurry extends Character {
 
     @Override 
     public String getSkill1Name() { 
-        return "Three Pointer (Damage 40-65)"; 
+        return "Three Pointer"; 
+        //return "Three Pointer (Damage 40-65)"; 
     }
     
     @Override 
     public String getSkill2Name() { 
-        return "Step Back (Damage 55-80)"; 
+        return "Step Back"; 
+        //return "Step Back (Damage 55-80)"; 
     }
     
     @Override 
     public String getSkill3Name() { 
-        return "God Mode (Damage 75-110, 35% chance +40 damage)"; 
+        return "God Mode"; 
+        // return "God Mode (Damage 75-110, 35% chance +40 damage)"; 
     }
     
     @Override 
