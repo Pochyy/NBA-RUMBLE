@@ -101,6 +101,40 @@ public class FightScreen extends javax.swing.JFrame {
     }
     
     
+        //GALLARDO : 
+        // NEW FUNCTION: handleInsufficientStamina()
+        // *Called when player lacks stamina for a skill
+        // *Recovers 10-30 stamina based on max stamina
+        // *Shows popup message
+        // *Skips turn to opponent
+    
+    private void handleInsufficientStamina(Character player, Character opponent, boolean isPlayer1) {
+        // Calculate recovery amount (15-20% of max stamina)
+        int recoveryAmount = player.getMaxStamina() / 6;
+        if (recoveryAmount < 10) recoveryAmount = 10;
+        if (recoveryAmount > 30) recoveryAmount = 30;
+        
+        // Show message that player is exhausted
+        javax.swing.JOptionPane.showMessageDialog(this, 
+            player.getName() + " is too exhausted to use any skill!\n" +
+            "Turn will be skipped and " + player.getName() + " recovers " + recoveryAmount + " stamina.",
+            "Insufficient Stamina",
+            javax.swing.JOptionPane.WARNING_MESSAGE);
+        
+        // Recover stamina
+        player.restoreStamina(recoveryAmount);
+        updateBars();
+        
+        // Switch turn to the other player
+        if (isPlayer1) {
+            isPlayer1Turn = false;
+        } else {
+            isPlayer1Turn = true;
+        }
+        toggleButtons();
+    }
+    
+    
     private void toggleButtons() {
         // Player 1's buttons are active ONLY if it is Player 1's turn
         btnSkill1Player1.setEnabled(isPlayer1Turn);
@@ -328,57 +362,87 @@ public class FightScreen extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    //GALLARDO : STAMINA FIX SUMMARY:
+    // 1. Added handleInsufficientStamina() method - skips turn, recovers 10-30 stamina, shows popup
+    // 2. Updated Player 1's 3 skill buttons - checks stamina first before using skill
+    // 3. Updated Player 2's 3 skill buttons - checks stamina first before using skill
+    
+    
     private void btnSkill1Player1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill1Player1ActionPerformed
         // TODO add your handling code here:
-        player1Character.useSkill1(player2Character);
-        updateBars();
-        
-        isPlayer1Turn = false; // Switch to Player 2
-        toggleButtons();       // Update the buttons
+          if (player1Character.getStamina() < player1Character.getSkill1Stamina()) {
+        handleInsufficientStamina(player1Character, player2Character, true);
+        return;
+    }
+    player1Character.useSkill1(player2Character);
+    updateBars();
+    isPlayer1Turn = false;
+    toggleButtons();
     }//GEN-LAST:event_btnSkill1Player1ActionPerformed
 
     private void btnSkill3Player1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill3Player1ActionPerformed
         // TODO add your handling code here:
-       player1Character.useSkill3(player2Character);
+        if (player1Character.getStamina() < player1Character.getSkill3Stamina()) {
+        handleInsufficientStamina(player1Character, player2Character, true);
+        return;
+        }
+       
+        player1Character.useSkill3(player2Character);
         updateBars();
-        
-        isPlayer1Turn = false; // Switch to Player 2
-        toggleButtons();       // Update the buttons
+       
+        isPlayer1Turn = false;
+        toggleButtons();  
     }//GEN-LAST:event_btnSkill3Player1ActionPerformed
 
     private void btnSkill2Player1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill2Player1ActionPerformed
         // TODO add your handling code here:
         player1Character.useSkill2(player2Character);
         updateBars();
-        
-        isPlayer1Turn = false; // Switch to Player 2
-        toggleButtons();       // Update the buttons
+    
+        isPlayer1Turn = false;
+        toggleButtons();     
     }//GEN-LAST:event_btnSkill2Player1ActionPerformed
 
     private void btnSkill1Player2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill1Player2ActionPerformed
         // TODO add your handling code here:
+        if (player2Character.getStamina() < player2Character.getSkill1Stamina()) {
+        handleInsufficientStamina(player2Character, player1Character, false);
+        return;
+        }
+        
         player2Character.useSkill1(player1Character);
         updateBars();
         
-        isPlayer1Turn = true; // Switch to Player 1
-        toggleButtons();       // Update the buttons
+        isPlayer1Turn = true;
+        toggleButtons();      // Update the buttons
     }//GEN-LAST:event_btnSkill1Player2ActionPerformed
 
     private void btnSkill2Player2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill2Player2ActionPerformed
         // TODO add your handling code here:
+         if (player2Character.getStamina() < player2Character.getSkill2Stamina()) {
+        handleInsufficientStamina(player2Character, player1Character, false);
+        return;
+        }
+        
         player2Character.useSkill2(player1Character);
         updateBars();
         
-        isPlayer1Turn = true; // Switch to Player 1
+        isPlayer1Turn = true;
         toggleButtons();       // Update the buttons
     }//GEN-LAST:event_btnSkill2Player2ActionPerformed
 
     private void btnSkill3Player2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill3Player2ActionPerformed
         // TODO add your handling code here:
+        if (player2Character.getStamina() < player2Character.getSkill3Stamina()) {
+        handleInsufficientStamina(player2Character, player1Character, false);
+        return;
+        }
+        
         player2Character.useSkill3(player1Character);
         updateBars();
         
-        isPlayer1Turn = true; // Switch to Player 1
+        isPlayer1Turn = true;
         toggleButtons();       // Update the buttons
     }//GEN-LAST:event_btnSkill3Player2ActionPerformed
 
