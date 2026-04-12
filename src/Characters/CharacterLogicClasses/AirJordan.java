@@ -15,35 +15,80 @@ public class AirJordan extends Character {
     }
 
     @Override
-    public void useSkill1(Character target) {
-        if (!useStamina(35)) return;
+    public String useSkill1(Character target) {
+        // 1. Deduct Stamina (FightScreen already checked if we had enough)
+        this.stamina -= getSkill1Stamina();
         incrementTurnCounter();
-        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Floating Jumper!");
-        int damage = 50 + random.nextInt(21);
-        target.takeDamage(damage);
-    }
-
-    @Override
-    public void useSkill2(Character target) {
-        if (!useStamina(60)) return;
-        incrementTurnCounter();
-        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Air Dunk!");
-        int damage = 75 + random.nextInt(26);
-        target.takeDamage(damage);
-    }
-
-    @Override
-    public void useSkill3(Character target) {
-        if (!useStamina(125)) return;
-        incrementTurnCounter();
-        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Goated Staredown!");
-        int damage = 140 + random.nextInt(61);
-        target.takeDamage(damage);
         
+        // 2. Build the attack announcement
+        String attackMsg = "[Turn " + turnCounter + "] " + name + " uses Floating Jumper!\n";
+        
+        // 3. Calculate damage and catch the result string from the target
+        int damage = 50 + random.nextInt(21);
+        String damageMsg = target.takeDamage(damage); 
+        
+        // 4. Return the combined story!
+        return attackMsg + damageMsg;
+        
+        
+//        OLD CODE
+//        if (!useStamina(35)) return;
+//        incrementTurnCounter();
+//        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Floating Jumper!");
+//        int damage = 50 + random.nextInt(21);
+//        target.takeDamage(damage);
+    }
+
+    @Override
+    public String useSkill2(Character target) {
+        
+        this.stamina -= getSkill2Stamina();
+        incrementTurnCounter();
+        
+        String attackMsg = "[Turn " + turnCounter + "] " + name + " uses Air Dunk!\n";
+        
+        int damage = 75 + random.nextInt(26);
+        String damageMsg = target.takeDamage(damage);
+        
+        return attackMsg + damageMsg;
+          
+//        OLD CODE
+//        if (!useStamina(60)) return;
+//        incrementTurnCounter();
+//        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Air Dunk!");
+//        int damage = 75 + random.nextInt(26);
+//        target.takeDamage(damage);
+    }
+
+    @Override
+    public String useSkill3(Character target) {
+        
+        this.stamina -= getSkill3Stamina();
+        incrementTurnCounter();
+        
+        String attackMsg = "[Turn " + turnCounter + "] " + name + " uses Goated Staredown!\n";
+        
+        int damage = 140 + random.nextInt(61);
+        String damageMsg = target.takeDamage(damage) + "\n";
+        
+        // Handle the Goated Bonus chance
+        String bonusMsg = "";
         if (random.nextInt(100) < 65) {
-            restoreStamina(70);
-            System.out.println(" GOATED BONUS: +70 Stamina!");
+            // Because restoreStamina returns a String now, we just catch it!
+            bonusMsg = "GOATED BONUS: " + this.restoreStamina(70);
+            
+//        if (!useStamina(125)) return;
+//        incrementTurnCounter();
+//        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Goated Staredown!");
+//        int damage = 140 + random.nextInt(61);
+//        target.takeDamage(damage);
+//        
+//        if (random.nextInt(100) < 65) {
+//            restoreStamina(70);
+//            System.out.println(" GOATED BONUS: +70 Stamina!");
         }
+        
+        return attackMsg + damageMsg + bonusMsg;
     }
 
     @Override 

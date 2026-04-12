@@ -17,60 +17,125 @@ public class ShakeroNiel extends Character {
     }
 
     @Override
-    public void useSkill1(Character target) {
-        if (!useStamina(65)) return;
+    public String useSkill1(Character target) {
+        
+        this.stamina -= getSkill1Stamina();
         incrementTurnCounter();
-        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Power Dunk!");
+        
+        String attackMsg = "[Turn " + turnCounter + "] " + name + " uses Power Dunk!\n";
         int damage = 30 + random.nextInt(21);
+        String bonusMsg = "";
         
         if (groundbreakerActive && groundbreakerTurns > 0) {
             damage += 20;
-            System.out.println(" Groundbreaker bonus: +20 damage!");
+            bonusMsg = "💥 Groundbreaker bonus: +20 damage!\n";
             groundbreakerTurns--;
             if (groundbreakerTurns == 0) {
                 groundbreakerActive = false;
-                System.out.println(" Groundbreaker Mode ends!");
+                bonusMsg += "🛑 Groundbreaker Mode ends!\n";
             }
         }
         
-        target.takeDamage(damage);
+        String damageMsg = target.takeDamage(damage);
+        
+        return attackMsg + bonusMsg + damageMsg;
+        
+//        OLD CODE
+//        if (!useStamina(65)) return;
+//        incrementTurnCounter();
+//        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Power Dunk!");
+//        int damage = 30 + random.nextInt(21);
+//        
+//        if (groundbreakerActive && groundbreakerTurns > 0) {
+//            damage += 20;
+//            System.out.println(" Groundbreaker bonus: +20 damage!");
+//            groundbreakerTurns--;
+//            if (groundbreakerTurns == 0) {
+//                groundbreakerActive = false;
+//                System.out.println(" Groundbreaker Mode ends!");
+//            }
+//        }
+//        
+//        target.takeDamage(damage);
     }
 
     @Override
-    public void useSkill2(Character target) {
-        if (!useStamina(55)) return;
+    public String useSkill2(Character target) {
+        
+        this.stamina -= getSkill2Stamina();
         incrementTurnCounter();
-        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Earthquake Slam!");
+        
+        String attackMsg = "[Turn " + turnCounter + "] " + name + " uses Earthquake Slam!\n";
         int damage = 30 + random.nextInt(35);
+        String bonusMsg = "";
         
         if (groundbreakerActive && groundbreakerTurns > 0) {
             damage += 15;
-            System.out.println(" Groundbreaker bonus: +15 damage!");
+            bonusMsg = "💥 Groundbreaker bonus: +15 damage!\n";
             groundbreakerTurns--;
             if (groundbreakerTurns == 0) {
                 groundbreakerActive = false;
-                System.out.println(" Groundbreaker Mode ends!");
+                bonusMsg += "🛑 Groundbreaker Mode ends!\n";
             }
         }
         
-        target.takeDamage(damage);
+        String damageMsg = target.takeDamage(damage);
+        
+        return attackMsg + bonusMsg + damageMsg;
+        
+//        OLD CODE
+//        if (!useStamina(55)) return;
+//        incrementTurnCounter();
+//        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Earthquake Slam!");
+//        int damage = 30 + random.nextInt(35);
+//        
+//        if (groundbreakerActive && groundbreakerTurns > 0) {
+//            damage += 15;
+//            System.out.println(" Groundbreaker bonus: +15 damage!");
+//            groundbreakerTurns--;
+//            if (groundbreakerTurns == 0) {
+//                groundbreakerActive = false;
+//                System.out.println(" Groundbreaker Mode ends!");
+//            }
+//        }
+//        
+//        target.takeDamage(damage);
     }
 
     @Override
-    public void useSkill3(Character target) {
-        if (!useStamina(130)) return;
+    public String useSkill3(Character target) {
+        
+        this.stamina -= getSkill3Stamina();
         incrementTurnCounter();
-        System.out.println("\n[Turn " + turnCounter + "] " + name + " activates Groundbreaker Mode!");
+        
+        String attackMsg = "[Turn " + turnCounter + "] " + name + " activates Groundbreaker Mode!\n";
         
         groundbreakerActive = true;
         groundbreakerTurns = 3;
         
         int damage = 100 + random.nextInt(61);
-        target.takeDamage(damage);
+        String damageMsg = target.takeDamage(damage) + "\n";
         
-        heal(60);
-        System.out.println(" Groundbreaker Mode activated for 3 turns!");
-        System.out.println(" +45 Damage bonus active for 3 turns!");
+        // Because heal() returns a string now, we catch it!
+        String healMsg = heal(60) + "\n";
+        String buffMsg = "💥 Groundbreaker Mode activated! Bonus damage active for 3 turns!";
+        
+        return attackMsg + damageMsg + healMsg + buffMsg;
+        
+//        OLD CODE
+//        if (!useStamina(130)) return;
+//        incrementTurnCounter();
+//        System.out.println("\n[Turn " + turnCounter + "] " + name + " activates Groundbreaker Mode!");
+//        
+//        groundbreakerActive = true;
+//        groundbreakerTurns = 3;
+//        
+//        int damage = 100 + random.nextInt(61);
+//        target.takeDamage(damage);
+//        
+//        heal(60);
+//        System.out.println(" Groundbreaker Mode activated for 3 turns!");
+//        System.out.println(" +45 Damage bonus active for 3 turns!");
     }
 
     @Override 

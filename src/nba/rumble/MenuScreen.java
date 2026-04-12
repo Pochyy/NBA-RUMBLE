@@ -78,21 +78,32 @@ public class MenuScreen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPVPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPVPActionPerformed
+        //PRIME
+        this.dispose(); // Closes the MenuScreen to prevent duplicates immediately
+        
         CharacterSelectScreen screen = new CharacterSelectScreen();
         screen.setVisible(true);
         screen.showModePanel("PVP");
     }//GEN-LAST:event_btnPVPActionPerformed
 
     private void btnPVEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPVEActionPerformed
+        //PRIME
+        this.dispose(); // Closes the MenuScreen to prevent duplicates immediately
+        
         CharacterSelectScreen screen = new CharacterSelectScreen();
         screen.setVisible(true);
         screen.showModePanel("PVE");
     }//GEN-LAST:event_btnPVEActionPerformed
 
     private void btnArcadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArcadeActionPerformed
+        //PRIME
+        this.dispose(); // Closes the MenuScreen to prevent duplicates immediately
+        
         CharacterSelectScreen screen = new CharacterSelectScreen();
         screen.setVisible(true);
         screen.showModePanel("Arcade");
+        
+        
     }//GEN-LAST:event_btnArcadeActionPerformed
 
     /**
