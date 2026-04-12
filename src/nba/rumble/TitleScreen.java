@@ -5,23 +5,39 @@
 package nba.rumble;
 import javax.swing.*;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 /**
- *
- * @author lario
- */
+*
+* @author lario
+*/
 public class TitleScreen extends javax.swing.JFrame {
-
+ 
     /**
      * Creates new form TitleScreen
      */
     public TitleScreen() {
         initComponents();
-        
-        
-        
+        //to make it fullscreen 
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         ImageIcon pic = new ImageIcon(getClass().getResource("/Backgrounds/titlescreen.gif"));
         Image img = pic.getImage().getScaledInstance(lbltitlescreen.getWidth(), lbltitlescreen.getHeight(), Image.SCALE_DEFAULT);
         lbltitlescreen.setIcon(new ImageIcon(img));
+         //add click listener to whole screen
+        getContentPane().addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                goToMenuScreen();
+            }
+        });
+    }
+    //implement function to go to menuscreen
+    private void goToMenuScreen(){
+        MenuScreen obj = new MenuScreen();
+        obj.setLocation(this.getLocation());
+        obj.setVisible(true);
+        this.dispose();
     }
 
     /**

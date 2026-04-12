@@ -5,21 +5,40 @@
 package nba.rumble;
 import javax.swing.*;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+ 
+ 
 /**
- *
- * @author lario
- */
+*
+* @author lario
+*/
 public class IntroScreen extends javax.swing.JFrame {
-
+ 
     /**
      * Creates new form IntroScreen
      */
     public IntroScreen() {
         initComponents();
-        
+        //to make it fullscreen 
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         ImageIcon pic = new ImageIcon(getClass().getResource("/Backgrounds//introscreen.gif"));
         Image img = pic.getImage().getScaledInstance(lblintroscreen.getWidth(), lblintroscreen.getHeight(), Image.SCALE_DEFAULT);
         lblintroscreen.setIcon(new ImageIcon(img));
+        //add click listener to whole screen
+        getContentPane().addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                goToTitleScreen();
+            }
+        });
+    }
+    //implement function to go to titlescreen
+    private void goToTitleScreen(){
+        TitleScreen obj = new TitleScreen();
+        obj.setLocation(this.getLocation());
+        obj.setVisible(true);
+        this.dispose();
     }
 
     /**
@@ -31,21 +50,12 @@ public class IntroScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
         lblintroscreen = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1920, 1080));
         setSize(new java.awt.Dimension(1920, 1080));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 180, -1, -1));
 
         lblintroscreen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Backgrounds/introscreen.gif"))); // NOI18N
         lblintroscreen.setMaximumSize(new java.awt.Dimension(1920, 1080));
@@ -54,17 +64,6 @@ public class IntroScreen extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        TitleScreen obj = new TitleScreen();
-        
-        obj.setLocation(this.getLocation());
-        
-        
-        
-        obj.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -102,7 +101,6 @@ public class IntroScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel lblintroscreen;
     // End of variables declaration//GEN-END:variables
 }
