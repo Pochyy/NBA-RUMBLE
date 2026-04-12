@@ -21,7 +21,9 @@ public abstract class Character {
         this.totalHealingReceived = 0;
     }
     
-    //PRIME'S CHANGES INSIDE CHARACTER CLASS: setHP, setStamina
+    // PRIME'S CHANGES INSIDE CHARACTER CLASS: setHP, setStamina
+    // UPDATED (04/12/2026): all print all had return statements (para maimplement siya sa GUI.
+    
     public void setHp(int hp) {
         this.hp = hp;
     }
@@ -33,19 +35,26 @@ public abstract class Character {
     
     public abstract String getImagePath();
 
-    public void takeDamage(int damage) {
+    public String takeDamage(int damage) {
         hp -= damage;
         if (hp < 0) hp = 0;
-        System.out.println(name + " takes " + damage + " damage! (HP: " + hp + "/" + maxHp + ")");
+        
+        //DIALOGUE UPDATE
+        return name + " takes " + damage + " damage! (HP: " + hp + "/" + maxHp + ")";
+//      System.out.println(name + " takes " + damage + " damage! (HP: " + hp + "/" + maxHp + ")");
     }
 
-    public void heal(int amount) {
+    public String heal(int amount) {
         int maxHealPerBattle = maxHp / 3;
         int remainingHealCap = maxHealPerBattle - totalHealingReceived;
         
         if (remainingHealCap <= 0) {
-            System.out.println(name + " has reached maximum healing capacity for this battle!");
-            return;
+            
+            // DIALOGUE UPDATE
+            return name + " has reached maximum healing capacity for this battle!";
+            
+//            System.out.println(name + " has reached maximum healing capacity for this battle!");
+//            return;
         }
         
         int actualHeal = Math.min(amount, remainingHealCap);
@@ -53,7 +62,9 @@ public abstract class Character {
         totalHealingReceived += actualHeal;
         
         if (hp > maxHp) hp = maxHp;
-        System.out.println(name + " heals " + actualHeal + " HP! (HP: " + hp + "/" + maxHp + ")");
+        //UPDATED DIALOGUE
+        return name + " heals " + actualHeal + " HP! (HP: " + hp + "/" + maxHp + ")";
+//        System.out.println(name + " heals " + actualHeal + " HP! (HP: " + hp + "/" + maxHp + ")");
     }
 
     public boolean useStamina(int amount) {
@@ -65,10 +76,14 @@ public abstract class Character {
         return false;
     }
 
-    public void restoreStamina(int amount) {
+    public String restoreStamina(int amount) {
         stamina += amount;
         if (stamina > maxStamina) stamina = maxStamina;
-        System.out.println(name + " regenerates " + amount + " stamina! (Stamina: " + stamina + "/" + maxStamina + ")");
+        
+        //UPDATED DIALOGUE
+        return name + " regenerates " + amount + " stamina! (Stamina: " + stamina + "/" + maxStamina + ")";
+
+//        System.out.println(name + " regenerates " + amount + " stamina! (Stamina: " + stamina + "/" + maxStamina + ")");
     }
 
     public void incrementTurnCounter() {
@@ -79,13 +94,20 @@ public abstract class Character {
         restoreStamina(regenAmount);
     }
     
-    public void desperateStaminaRestore() {
+    public String desperateStaminaRestore() {
         int restoreAmount = maxStamina / 4;
         if (restoreAmount < 15) restoreAmount = 15;
         stamina += restoreAmount;
         if (stamina > maxStamina) stamina = maxStamina;
-        System.out.println("\n" + name + " is exhausted! Taking a moment to catch breath...");
-        System.out.println(name + " desperately restores " + restoreAmount + " stamina! (Stamina: " + stamina + "/" + maxStamina + ")");
+        
+        //UPDATED DIALOGUE
+        return name + " is exhausted! Taking a moment to catch breath..." + "\n" +
+        name + " desperately restores " + restoreAmount + " stamina! (Stamina: " + stamina + "/" + maxStamina + ")";
+        
+//        System.out.println("\n" + name + " is exhausted! Taking a moment to catch breath...");
+//        System.out.println(name + " desperately restores " + restoreAmount + " stamina! (Stamina: " + stamina + "/" + maxStamina + ")");
+
+    
     }
     
     public boolean canUseAnySkill() {
@@ -111,9 +133,9 @@ public abstract class Character {
     public int getMaxStamina() { return maxStamina; }
     public int getTurnCounter() { return turnCounter; }
 
-    public abstract void useSkill1(Character target);
-    public abstract void useSkill2(Character target);
-    public abstract void useSkill3(Character target);
+    public abstract String useSkill1(Character target);
+    public abstract String useSkill2(Character target);
+    public abstract String useSkill3(Character target);
     public abstract String getSkill1Name();
     public abstract String getSkill2Name();
     public abstract String getSkill3Name();

@@ -16,54 +16,120 @@ public class Kowbe extends Character {
     }
 
     @Override
-    public void useSkill1(Character target) {
-        if (!useStamina(40)) return;
+    public String useSkill1(Character target) {
+        
+        // Deduct stamina and advance turn counter
+        this.stamina -= getSkill1Stamina();
         incrementTurnCounter();
-        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Post Up Smack!");
+        
+        String attackMsg = "[Turn " + turnCounter + "] " + name + " uses Post Up Smack!\n";
         int damage = 45 + random.nextInt(26);
+        String bonusMsg = "";
         
+        // Handle the active buff
         if (bonusDamageTurns > 0) {
             damage += 35;
-            System.out.println(" Bonus damage: +35!");
+            bonusMsg = "🐍 MAMBA MENTALITY: +35 Bonus damage applied!\n";
             bonusDamageTurns--;
         }
         
-        target.takeDamage(damage);
+        String damageMsg = target.takeDamage(damage);
+        
+        return attackMsg + bonusMsg + damageMsg;
+        
+//        OLD CODE
+//        if (!useStamina(40)) return;
+//        incrementTurnCounter();
+//        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Post Up Smack!");
+//        int damage = 45 + random.nextInt(26);
+//        
+//        if (bonusDamageTurns > 0) {
+//            damage += 35;
+//            System.out.println(" Bonus damage: +35!");
+//            bonusDamageTurns--;
+//        }
+//        
+//        target.takeDamage(damage);
     }
 
     @Override
-    public void useSkill2(Character target) {
-        if (!useStamina(60)) return;
+    public String useSkill2(Character target) {
+        
+        this.stamina -= getSkill2Stamina();
         incrementTurnCounter();
-        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Post Up Tackle!");
+        
+        String attackMsg = "[Turn " + turnCounter + "] " + name + " uses Post Up Tackle!\n";
         int damage = 70 + random.nextInt(21);
+        String bonusMsg = "";
         
+        // Handle the active buff
         if (bonusDamageTurns > 0) {
             damage += 35;
-            System.out.println(" Bonus damage: +35!");
+            bonusMsg = "🐍 MAMBA MENTALITY: +35 Bonus damage applied!\n";
             bonusDamageTurns--;
         }
         
-        target.takeDamage(damage);
+        String damageMsg = target.takeDamage(damage);
+        
+        return attackMsg + bonusMsg + damageMsg;
+        
+//        OLD CODE
+//        if (!useStamina(60)) return;
+//        incrementTurnCounter();
+//        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Post Up Tackle!");
+//        int damage = 70 + random.nextInt(21);
+//        
+//        if (bonusDamageTurns > 0) {
+//            damage += 35;
+//            System.out.println(" Bonus damage: +35!");
+//            bonusDamageTurns--;
+//        }
+//        
+//        target.takeDamage(damage);
     }
 
     @Override
-    public void useSkill3(Character target) {
-        if (!useStamina(120)) return;
-        incrementTurnCounter();
-        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses InYoFace Fadeaway!");
-        int damage = 110 + random.nextInt(81);
+    public String useSkill3(Character target) {
         
+        this.stamina -= getSkill3Stamina();
+        incrementTurnCounter();
+        
+        String attackMsg = "[Turn " + turnCounter + "] " + name + " uses InYoFace Fadeaway!\n";
+        int damage = 110 + random.nextInt(81);
+        String bonusMsg = "";
+        
+        // Check if he ALREADY had the buff active before doing this move
         if (bonusDamageTurns > 0) {
             damage += 35;
-            System.out.println(" Bonus damage: +35!");
+            bonusMsg = "🐍 MAMBA MENTALITY: +35 Bonus damage applied!\n";
             bonusDamageTurns--;
         }
         
-        target.takeDamage(damage);
+        String damageMsg = target.takeDamage(damage) + "\n";
         
+        // Apply the new buff for future turns
         bonusDamageTurns = 2;
-        System.out.println(" +35 Damage bonus applied to next 2 attacks!");
+        String buffMsg = "🐍 Mamba Mentality activated! +35 Damage bonus to next 2 attacks!";
+        
+        // Return everything stacked together cleanly
+        return attackMsg + bonusMsg + damageMsg + buffMsg;
+        
+//        OLD CODE
+//        if (!useStamina(120)) return;
+//        incrementTurnCounter();
+//        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses InYoFace Fadeaway!");
+//        int damage = 110 + random.nextInt(81);
+//        
+//        if (bonusDamageTurns > 0) {
+//            damage += 35;
+//            System.out.println(" Bonus damage: +35!");
+//            bonusDamageTurns--;
+//        }
+//        
+//        target.takeDamage(damage);
+//        
+//        bonusDamageTurns = 2;
+//        System.out.println(" +35 Damage bonus applied to next 2 attacks!");
     }
 
     @Override 

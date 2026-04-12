@@ -17,54 +17,114 @@ public class Luca extends Character {
     }
 
     @Override
-    public void useSkill1(Character target) {
-        if (!useStamina(40)) return;
+    public String useSkill1(Character target) {
+        
+        this.stamina -= getSkill1Stamina();
         incrementTurnCounter();
-        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Stepback Dagger!");
+        
+        String attackMsg = "[Turn " + turnCounter + "] " + name + " uses Stepback Dagger!\n";
         int damage = 50 + random.nextInt(26);
+        String bonusMsg = "";
         
         if (bonusDamageTurns > 0) {
             damage += 40;
-            System.out.println(" Bonus damage: +40!");
+            bonusMsg = "🪄 LUKA MAGIC: +40 Bonus damage applied!\n";
             bonusDamageTurns--;
         }
         
-        target.takeDamage(damage);
+        String damageMsg = target.takeDamage(damage);
+        
+        return attackMsg + bonusMsg + damageMsg;
+        
+//        OLD CODE
+//        if (!useStamina(40)) return;
+//        incrementTurnCounter();
+//        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Stepback Dagger!");
+//        int damage = 50 + random.nextInt(26);
+//        
+//        if (bonusDamageTurns > 0) {
+//            damage += 40;
+//            System.out.println(" Bonus damage: +40!");
+//            bonusDamageTurns--;
+//        }
+//        
+//        target.takeDamage(damage);
     }
 
     @Override
-    public void useSkill2(Character target) {
-        if (!useStamina(55)) return;
+    public String useSkill2(Character target) {
+        
+        this.stamina -= getSkill2Stamina();
         incrementTurnCounter();
-        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses No-Look Nightmare!");
+        
+        String attackMsg = "[Turn " + turnCounter + "] " + name + " uses No-Look Nightmare!\n";
         int damage = 65 + random.nextInt(26);
+        String bonusMsg = "";
         
         if (bonusDamageTurns > 0) {
             damage += 40;
-            System.out.println(" Bonus damage: +40!");
+            bonusMsg = "🪄 LUKA MAGIC: +40 Bonus damage applied!\n";
             bonusDamageTurns--;
         }
         
-        target.takeDamage(damage);
+        String damageMsg = target.takeDamage(damage);
+        
+        return attackMsg + bonusMsg + damageMsg;
+        
+//        OLD CODE
+//        if (!useStamina(55)) return;
+//        incrementTurnCounter();
+//        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses No-Look Nightmare!");
+//        int damage = 65 + random.nextInt(26);
+//        
+//        if (bonusDamageTurns > 0) {
+//            damage += 40;
+//            System.out.println(" Bonus damage: +40!");
+//            bonusDamageTurns--;
+//        }
+//        
+//        target.takeDamage(damage);
     }
 
     @Override
-    public void useSkill3(Character target) {
-        if (!useStamina(120)) return;
+    public String useSkill3(Character target) {
+        
+        this.stamina -= getSkill3Stamina();
         incrementTurnCounter();
-        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Too Small Finisher!");
+        
+        String attackMsg = "[Turn " + turnCounter + "] " + name + " uses Too Small Finisher!\n";
         int damage = 125 + random.nextInt(61);
+        String bonusMsg = "";
         
         if (bonusDamageTurns > 0) {
             damage += 40;
-            System.out.println(" Bonus damage: +40!");
+            bonusMsg = "🪄 LUKA MAGIC: +40 Bonus damage applied!\n";
             bonusDamageTurns--;
         }
         
-        target.takeDamage(damage);
+        String damageMsg = target.takeDamage(damage) + "\n";
         
         bonusDamageTurns = 2;
-        System.out.println(" +40 Damage bonus applied to next 2 attacks!");
+        String buffMsg = "🪄 Magic activated! +40 Damage bonus to next 2 attacks!";
+        
+        return attackMsg + bonusMsg + damageMsg + buffMsg;
+        
+//        OLD CODE
+//        if (!useStamina(120)) return;
+//        incrementTurnCounter();
+//        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Too Small Finisher!");
+//        int damage = 125 + random.nextInt(61);
+//        
+//        if (bonusDamageTurns > 0) {
+//            damage += 40;
+//            System.out.println(" Bonus damage: +40!");
+//            bonusDamageTurns--;
+//        }
+//        
+//        target.takeDamage(damage);
+//        
+//        bonusDamageTurns = 2;
+//        System.out.println(" +40 Damage bonus applied to next 2 attacks!");
     }
 
     @Override 

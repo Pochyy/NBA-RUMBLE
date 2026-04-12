@@ -27,23 +27,52 @@ import Characters.CharacterLogicClasses.Wembymama;
 
 
 
+
 public class CharacterSelectScreen extends javax.swing.JFrame {
 
     // true = Bot picks itself, false = Player picks for Bot
     private boolean doesBotPickRandom = true;
     
+//    UPDATED: PRIME (04/12/2026)
+    // doesBotPickRandom variable default difficulty is set to Medium
+    private String botDifficulty = "Medium";
+    
     private void startFight(){
-       //eyyyy nagamit nako ang katong sleep type shit sa tudlo ni sir khai ;) 
-    javax.swing.Timer timer = new javax.swing.Timer(2000, e -> {
+        
+        //UPDATED PART: PRIME
+        //Logic intended is to implement the logic for PVE inside the startFight(), para mastart ang FightScreen specifically for PVE
+        
+        javax.swing.Timer timer = new javax.swing.Timer(2000, e -> {
             
-            FightScreen fightscreen = new FightScreen(player1Character, player2Character); //sends objects to FightScreen they go weeeeeeeeeee
+            // Check if we are in PVE mode based on which panel is active!
+            boolean isPVE = pnlPVE.isVisible();
+
+            // Pass the isPVE boolean as a 3rd argument, botDifficulty as a 4th argument
+            FightScreen fightscreen = new FightScreen(player1Character, player2Character, isPVE, botDifficulty); 
             fightscreen.setVisible(true); 
 
-            this.dispose(); // Close the current selection screen
+            this.dispose(); 
         });
 
         timer.setRepeats(false); 
         timer.start();
+        
+        
+//        Vinz's previous logic code (ikaw ra bahala edit ani vinz if you're reading this
+//        either delete rani or keep, thank you
+
+
+//       //eyyyy nagamit nako ang katong sleep type shit sa tudlo ni sir khai ;) 
+//    javax.swing.Timer timer = new javax.swing.Timer(2000, e -> {
+//            
+//            FightScreen fightscreen = new FightScreen(player1Character, player2Character); //sends objects to FightScreen they go weeeeeeeeeee
+//            fightscreen.setVisible(true); 
+//
+//            this.dispose(); // Close the current selection screen
+//        });
+//
+//        timer.setRepeats(false); 
+//        timer.start();
     }
     
     //Panel on Main Menu screen, dictates what panel to show when button is pressed 
@@ -61,28 +90,64 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
 //                POP UP SCREEN FOR PVE (Prime's Part)           
                 
         {
+            // UPDATED LOGIC CODE (PRIME)
+            // -> PVE has Difficulty option now: Easy, Medium, Hard
             pnlPVE.setVisible(true);
             
-            // --- POP-UP LOGIC START ---
-            Object[] options = {"Random Bot", "I'll Pick for Bot"};
-            int choice = javax.swing.JOptionPane.showOptionDialog(this,
+            // --- 1st POP-UP: Bot Selection Mode ---
+            Object[] selectionOptions = {"Random Bot", "I'll Pick for Bot"};
+            int selectionChoice = javax.swing.JOptionPane.showOptionDialog(this,
                     "How should the Bot select its character?",
                     "PVE Mode Setup",
                     javax.swing.JOptionPane.YES_NO_OPTION,
                     javax.swing.JOptionPane.QUESTION_MESSAGE,
-                    null, options, options[0]);
+                    null, selectionOptions, selectionOptions[0]);
 
-            // If user clicks "Random Bot" (index 0)
-            if (choice == 0) {
-                doesBotPickRandom = true;
-                // Optional: Show a little notification
-                System.out.println("Mode: Random AI enabled");
-            } else {
-                doesBotPickRandom = false;
-                System.out.println("Mode: Manual selection enabled");
-            }
+            doesBotPickRandom = (selectionChoice == 0);
+
+            // --- 2nd POP-UP: Bot Difficulty ---
+            Object[] diffOptions = {"Easy", "Medium", "Hard"};
+            int diffChoice = javax.swing.JOptionPane.showOptionDialog(this,
+                    "Select Bot Difficulty:",
+                    "AI Behavior",
+                    javax.swing.JOptionPane.DEFAULT_OPTION,
+                    javax.swing.JOptionPane.QUESTION_MESSAGE,
+                    null, diffOptions, diffOptions[1]); // Default highlights "Medium"
+
+            // Set the string based on the player's choice
+            if (diffChoice == 0) botDifficulty = "Easy";
+            else if (diffChoice == 1) botDifficulty = "Medium";
+            else if (diffChoice == 2) botDifficulty = "Hard";
+            
+            System.out.println("Mode selected: " + botDifficulty);
             // --- POP-UP LOGIC END ---
         }
+            
+//            PREVIOUS CODE (can be used for studying logic and comparison)
+//            might come in handy later...
+
+
+//            pnlPVE.setVisible(true);
+//            
+//            // --- POP-UP LOGIC START ---
+//            Object[] options = {"Random Bot", "I'll Pick for Bot"};
+//            int choice = javax.swing.JOptionPane.showOptionDialog(this,
+//                    "How should the Bot select its character?",
+//                    "PVE Mode Setup",
+//                    javax.swing.JOptionPane.YES_NO_OPTION,
+//                    javax.swing.JOptionPane.QUESTION_MESSAGE,
+//                    null, options, options[0]);
+//
+//            // If user clicks "Random Bot" (index 0)
+//            if (choice == 0) {
+//                doesBotPickRandom = true;
+//                // Optional: Show a little notification
+//                System.out.println("Mode: Random AI enabled");
+//            } else {
+//                doesBotPickRandom = false;
+//                System.out.println("Mode: Manual selection enabled");
+//            }
+
 //              POP-UP SCREEN LOGIC CODE ENDS HERE (Prime)
         
         }

@@ -19,11 +19,17 @@ public class FightScreen extends javax.swing.JFrame {
     private Character player1Character;
     private Character player2Character;
     
-    public FightScreen(Character p1, Character p2){
+    //Added another global variable, specifically for PVE (Prime)
+    private boolean isPVE = false; // Add this variable to track the mode
+    private String botDifficulty = "Medium"; // New variable for Bot Difficulty
+    
+    public FightScreen(Character p1, Character p2, boolean isPVE, String botDifficulty){
         initComponents();
         
         this.player1Character = p1;
         this.player2Character = p2;
+        this.isPVE = isPVE; // Save the mode so the rest of the class can use it
+        this.botDifficulty = botDifficulty; // Saves it to the class "CharacterSelectScreen"
         
         setCharacterImages();
         setSkillNames();
@@ -59,6 +65,129 @@ public class FightScreen extends javax.swing.JFrame {
     /**
      * Creates new form FightScreen
      */
+    
+    
+    // PRIME: DIALOGUE BOX INSIDE THE GUI
+    // - called method whenever it needs to display text in the GUI
+    public void appendDialogue(String message) {
+        // Adds the text, plus a line break (\n) so the next message is on a new line
+        txtDialogue.append(message + "\n"); 
+        
+        // This forces the scrollbar to automatically jump to the newest text at the bottom
+        txtDialogue.setCaretPosition(txtDialogue.getDocument().getLength()); 
+    }
+    
+    // PRIME: BOT BRAIN FOR PVE METHOD IS IMPLEMENTED HERE (can be used both in PVE and Arcade)
+    private void executeBotTurn() {
+        // A 1.5 second delay makes the bot feel like it's "thinking"
+        javax.swing.Timer botBrainTimer = new javax.swing.Timer(1500, e -> {
+            
+            boolean skillUsed = false;
+            
+            // === EASY MODE: Random Decision ===
+            
+//          UPDATED CODE (PRIME)
+            if (botDifficulty.equals("Easy")) {
+                int randomSkill = (int)(Math.random() * 3) + 1; // Picks 1, 2, or 3
+                
+                if (randomSkill == 3 && player2Character.getStamina() >= player2Character.getSkill3Stamina()) {
+                    String botLog = player2Character.useSkill3(player1Character); 
+                    appendDialogue(botLog + "\n--------------------");
+                    skillUsed = true;
+                } else if (randomSkill >= 2 && player2Character.getStamina() >= player2Character.getSkill2Stamina()) {
+                    String botLog = player2Character.useSkill2(player1Character); 
+                    appendDialogue(botLog + "\n--------------------");
+                    skillUsed = true;
+                } else if (player2Character.getStamina() >= player2Character.getSkill1Stamina()) {
+                    String botLog = player2Character.useSkill1(player1Character); 
+                    appendDialogue(botLog + "\n--------------------");
+                    skillUsed = true;
+                }
+            }
+            
+//            OLD CODE
+//            if (botDifficulty.equals("Easy")) {
+//                int randomSkill = (int)(Math.random() * 3) + 1; // Picks 1, 2, or 3
+//                
+//                if (randomSkill == 3 && player2Character.getStamina() >= player2Character.getSkill3Stamina()) {
+//                    player2Character.useSkill3(player1Character); skillUsed = true;
+//                } else if (randomSkill >= 2 && player2Character.getStamina() >= player2Character.getSkill2Stamina()) {
+//                    player2Character.useSkill2(player1Character); skillUsed = true;
+//                } else if (player2Character.getStamina() >= player2Character.getSkill1Stamina()) {
+//                    player2Character.useSkill1(player1Character); skillUsed = true;
+//                }
+//            } 
+            
+            // === HARD MODE: Stamina Preservation ===
+            else if (botDifficulty.equals("Hard")) {
+                // If stamina is less than 40% of max, purposely rest to save for a big hit!
+                if (player2Character.getStamina() < (player2Character.getMaxStamina() * 0.4)) {
+                    handleInsufficientStamina(player2Character, player1Character, false);
+                    return; // Ends turn immediately
+                }
+                // If it has plenty of stamina, it will fall down into the Medium logic to attack
+            }
+
+            // === MEDIUM MODE (And Fallback for Easy/Hard) ===
+            if (!skillUsed) {
+                if (player2Character.getStamina() >= player2Character.getSkill3Stamina()) {
+                    
+                    // Catch the Bot's attack text
+                    String botLog = player2Character.useSkill3(player1Character);
+                    appendDialogue(botLog + "\n--------------------");
+                    //player2Character.useSkill3(player1Character);
+                    
+                } else if (player2Character.getStamina() >= player2Character.getSkill2Stamina()) {
+                    
+                    // Catch the Bot's attack text
+                    String botLog = player2Character.useSkill2(player1Character);
+                    appendDialogue(botLog + "\n--------------------");
+                    
+//                    player2Character.useSkill2(player1Character);
+                } else if (player2Character.getStamina() >= player2Character.getSkill1Stamina()) {
+                    
+                    // Catch the Bot's attack text
+                    String botLog = player2Character.useSkill1(player1Character);
+                    appendDialogue(botLog + "\n--------------------");
+                    
+                    player2Character.useSkill1(player1Character);
+                } else {
+                    // Out of stamina, must rest
+                    handleInsufficientStamina(player2Character, player1Character, false);
+                    return;
+                }
+            }
+
+            // Finish turn and hand back to Player 1
+            updateBars();
+            isPlayer1Turn = true;
+            toggleButtons();
+            
+            
+//            OLD LOGIC (for reference and comparison)
+//            // Basic AI: Prioritize strongest skill if it has enough stamina
+//            if (player2Character.getStamina() >= player2Character.getSkill3Stamina()) {
+//                player2Character.useSkill3(player1Character);
+//            } else if (player2Character.getStamina() >= player2Character.getSkill2Stamina()) {
+//                player2Character.useSkill2(player1Character);
+//            } else if (player2Character.getStamina() >= player2Character.getSkill1Stamina()) {
+//                player2Character.useSkill1(player1Character);
+//            } else {
+//                // If the bot has no stamina, it uses your custom stamina recovery!
+//                handleInsufficientStamina(player2Character, player1Character, false);
+//                return; // Stop here because handleInsufficientStamina handles the turn switch
+//            }
+//
+//            // Update UI and pass the turn back to Player 1
+//            updateBars();
+//            isPlayer1Turn = true;
+//            toggleButtons();
+        });
+
+        botBrainTimer.setRepeats(false);
+        botBrainTimer.start();
+    }
+    
     
     private void setSkillNames() {
     // Player 1 buttons
@@ -141,6 +270,25 @@ public class FightScreen extends javax.swing.JFrame {
         btnSkill2Player1.setEnabled(isPlayer1Turn);
         btnSkill3Player1.setEnabled(isPlayer1Turn);
 
+        // PVE Bot Behavior is implemented here (Prime)
+        if (isPVE) {
+            // PVE MODE: Keep Player 2's UI buttons visually disabled so the user can't click them
+            btnSkill1Player2.setEnabled(false);
+            btnSkill2Player2.setEnabled(false);
+            btnSkill3Player2.setEnabled(false);
+            
+            // If it's NOT Player 1's turn, that means it's the Bot's turn.
+            if (!isPlayer1Turn && player1Character.getHp() > 0 && player2Character.getHp() > 0) {
+                executeBotTurn();
+            }
+        } else {
+            // PVP MODE (Your Original Logic)
+            btnSkill1Player2.setEnabled(!isPlayer1Turn);
+            btnSkill2Player2.setEnabled(!isPlayer1Turn);
+            btnSkill3Player2.setEnabled(!isPlayer1Turn);
+        }
+        
+        
         // Player 2's buttons are active ONLY if it is NOT Player 1's turn
         btnSkill1Player2.setEnabled(!isPlayer1Turn);
         btnSkill2Player2.setEnabled(!isPlayer1Turn);
@@ -233,6 +381,8 @@ public class FightScreen extends javax.swing.JFrame {
         btnSkill3Player2 = new javax.swing.JButton();
         lblPlayer1Character = new javax.swing.JLabel();
         lblPlayer2Character = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtDialogue = new javax.swing.JTextArea();
         lblBackground = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -276,7 +426,6 @@ public class FightScreen extends javax.swing.JFrame {
         pbHealthPlayer2.setStringPainted(true);
         jpPVPScreen.add(pbHealthPlayer2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 50, 400, 60));
 
-        btnSkill1Player1.setBackground(new java.awt.Color(255, 255, 255));
         btnSkill1Player1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnSkill1Player1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/skillplaceholder.png"))); // NOI18N
         btnSkill1Player1.setText("Skill 1");
@@ -286,9 +435,8 @@ public class FightScreen extends javax.swing.JFrame {
                 btnSkill1Player1ActionPerformed(evt);
             }
         });
-        jpPVPScreen.add(btnSkill1Player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 830, 140, 110));
+        jpPVPScreen.add(btnSkill1Player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 870, 140, 110));
 
-        btnSkill3Player1.setBackground(new java.awt.Color(255, 255, 255));
         btnSkill3Player1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnSkill3Player1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/skillplaceholder.png"))); // NOI18N
         btnSkill3Player1.setText("Skill 3");
@@ -298,9 +446,8 @@ public class FightScreen extends javax.swing.JFrame {
                 btnSkill3Player1ActionPerformed(evt);
             }
         });
-        jpPVPScreen.add(btnSkill3Player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 830, 140, 110));
+        jpPVPScreen.add(btnSkill3Player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 870, 140, 110));
 
-        btnSkill2Player1.setBackground(new java.awt.Color(255, 255, 255));
         btnSkill2Player1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnSkill2Player1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/skillplaceholder.png"))); // NOI18N
         btnSkill2Player1.setText("Skill 2");
@@ -310,9 +457,8 @@ public class FightScreen extends javax.swing.JFrame {
                 btnSkill2Player1ActionPerformed(evt);
             }
         });
-        jpPVPScreen.add(btnSkill2Player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 830, 140, 110));
+        jpPVPScreen.add(btnSkill2Player1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 870, 140, 110));
 
-        btnSkill1Player2.setBackground(new java.awt.Color(255, 255, 255));
         btnSkill1Player2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnSkill1Player2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/skillplaceholder.png"))); // NOI18N
         btnSkill1Player2.setText("Skill 1");
@@ -322,9 +468,8 @@ public class FightScreen extends javax.swing.JFrame {
                 btnSkill1Player2ActionPerformed(evt);
             }
         });
-        jpPVPScreen.add(btnSkill1Player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1120, 830, 140, 110));
+        jpPVPScreen.add(btnSkill1Player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 870, 140, 110));
 
-        btnSkill2Player2.setBackground(new java.awt.Color(255, 255, 255));
         btnSkill2Player2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnSkill2Player2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/skillplaceholder.png"))); // NOI18N
         btnSkill2Player2.setText("Skill 2");
@@ -334,9 +479,8 @@ public class FightScreen extends javax.swing.JFrame {
                 btnSkill2Player2ActionPerformed(evt);
             }
         });
-        jpPVPScreen.add(btnSkill2Player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1260, 830, 140, 110));
+        jpPVPScreen.add(btnSkill2Player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1240, 870, 140, 110));
 
-        btnSkill3Player2.setBackground(new java.awt.Color(255, 255, 255));
         btnSkill3Player2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnSkill3Player2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/skillplaceholder.png"))); // NOI18N
         btnSkill3Player2.setText("Skill 3");
@@ -346,13 +490,22 @@ public class FightScreen extends javax.swing.JFrame {
                 btnSkill3Player2ActionPerformed(evt);
             }
         });
-        jpPVPScreen.add(btnSkill3Player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1400, 830, 140, 110));
+        jpPVPScreen.add(btnSkill3Player2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1380, 870, 140, 110));
 
         lblPlayer1Character.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
         jpPVPScreen.add(lblPlayer1Character, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 260, 440, 430));
 
         lblPlayer2Character.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
         jpPVPScreen.add(lblPlayer2Character, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 260, 440, 430));
+
+        txtDialogue.setEditable(false);
+        txtDialogue.setBackground(new java.awt.Color(0, 0, 0));
+        txtDialogue.setColumns(20);
+        txtDialogue.setForeground(new java.awt.Color(255, 255, 0));
+        txtDialogue.setRows(5);
+        jScrollPane1.setViewportView(txtDialogue);
+
+        jpPVPScreen.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 710, 1200, 150));
 
         lblBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Backgrounds/SelectScreenCharacters.png"))); // NOI18N
         jpPVPScreen.add(lblBackground, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1920, 1080));
@@ -371,37 +524,84 @@ public class FightScreen extends javax.swing.JFrame {
     
     private void btnSkill1Player1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill1Player1ActionPerformed
         // TODO add your handling code here:
-          if (player1Character.getStamina() < player1Character.getSkill1Stamina()) {
-        handleInsufficientStamina(player1Character, player2Character, true);
-        return;
-    }
-    player1Character.useSkill1(player2Character);
-    updateBars();
-    isPlayer1Turn = false;
-    toggleButtons();
-    }//GEN-LAST:event_btnSkill1Player1ActionPerformed
-
-    private void btnSkill3Player1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill3Player1ActionPerformed
-        // TODO add your handling code here:
-        if (player1Character.getStamina() < player1Character.getSkill3Stamina()) {
+        if (player1Character.getStamina() < player1Character.getSkill1Stamina()) {
         handleInsufficientStamina(player1Character, player2Character, true);
         return;
         }
-       
-        player1Character.useSkill3(player2Character);
+        player1Character.useSkill1(player2Character);
+
+        // Catch the returned text from the skill
+        String battleLog = player1Character.useSkill1(player2Character);
+
+        // Put it in the GUI!
+        appendDialogue(battleLog + "\n--------------------");
+
         updateBars();
-       
         isPlayer1Turn = false;
-        toggleButtons();  
+        toggleButtons();
+    }//GEN-LAST:event_btnSkill1Player1ActionPerformed
+
+    private void btnSkill3Player1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill3Player1ActionPerformed
+        //UPDATED CODE (PRIME)
+        if (player1Character.getStamina() < player1Character.getSkill3Stamina()) {
+            handleInsufficientStamina(player1Character, player2Character, true);
+            return;
+        }
+        
+        // Catch the returned text from the skill
+        String battleLog = player1Character.useSkill3(player2Character);
+        
+        // Put it in the GUI!
+        appendDialogue(battleLog + "\n--------------------");
+        
+        updateBars();
+        isPlayer1Turn = false;
+        toggleButtons();
+        
+//        OLD CODE (check for comparison)
+//        if (player1Character.getStamina() < player1Character.getSkill3Stamina()) {
+//        handleInsufficientStamina(player1Character, player2Character, true);
+//        return;
+//        }
+//       
+//        player1Character.useSkill3(player2Character);
+//        updateBars();
+//       
+//        // --- ADD DIALOGUE HERE ---
+//        appendDialogue("Player 1 (" + player1Character.getName() + ") used " + player1Character.getSkill3Name() + "!");
+//        
+//        isPlayer1Turn = false;
+//        toggleButtons();  
     }//GEN-LAST:event_btnSkill3Player1ActionPerformed
 
     private void btnSkill2Player1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill2Player1ActionPerformed
-        // TODO add your handling code here:
-        player1Character.useSkill2(player2Character);
+        //UPDATED CODE (PRIME)
+        
+        if (player1Character.getStamina() < player1Character.getSkill2Stamina()) {
+            handleInsufficientStamina(player1Character, player2Character, true);
+            return;
+        }
+        
+        // Catch the returned text from the skill
+        String battleLog = player1Character.useSkill2(player2Character);
+        
+        // Put it in the GUI!
+        appendDialogue(battleLog + "\n--------------------");
+        
         updateBars();
-    
         isPlayer1Turn = false;
-        toggleButtons();     
+        toggleButtons();
+        
+//        OLD CODE (check for comparison)
+//     // TODO add your handling code here:
+//        player1Character.useSkill2(player2Character);
+//        updateBars();
+//    
+//        // --- ADD DIALOGUE HERE ---
+//        appendDialogue("Player 1 (" + player1Character.getName() + ") used " + player1Character.getSkill2Name() + "!");
+//        
+//        isPlayer1Turn = false;
+//        toggleButtons();     
     }//GEN-LAST:event_btnSkill2Player1ActionPerformed
 
     private void btnSkill1Player2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill1Player2ActionPerformed
@@ -411,9 +611,11 @@ public class FightScreen extends javax.swing.JFrame {
         return;
         }
         
-        player2Character.useSkill1(player1Character);
-        updateBars();
+        // GUI IMPLEMENTATION (DIALOGUE BOX)
+        String battleLog = player2Character.useSkill1(player1Character);
+        appendDialogue(battleLog + "\n--------------------");
         
+        updateBars();
         isPlayer1Turn = true;
         toggleButtons();      // Update the buttons
     }//GEN-LAST:event_btnSkill1Player2ActionPerformed
@@ -425,11 +627,13 @@ public class FightScreen extends javax.swing.JFrame {
         return;
         }
         
-        player2Character.useSkill2(player1Character);
-        updateBars();
+        // GUI IMPLEMENTATION (DIALOGUE BOX)
+        String battleLog = player2Character.useSkill2(player1Character);
+        appendDialogue(battleLog + "\n--------------------");
         
+        updateBars();
         isPlayer1Turn = true;
-        toggleButtons();       // Update the buttons
+        toggleButtons();      // Update the buttons
     }//GEN-LAST:event_btnSkill2Player2ActionPerformed
 
     private void btnSkill3Player2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill3Player2ActionPerformed
@@ -439,11 +643,13 @@ public class FightScreen extends javax.swing.JFrame {
         return;
         }
         
-        player2Character.useSkill3(player1Character);
-        updateBars();
+        // GUI IMPLEMENTATION (DIALOGUE BOX)
+        String battleLog = player2Character.useSkill3(player1Character);
+        appendDialogue(battleLog + "\n--------------------");
         
+        updateBars();
         isPlayer1Turn = true;
-        toggleButtons();       // Update the buttons
+        toggleButtons();      // Update the buttons
     }//GEN-LAST:event_btnSkill3Player2ActionPerformed
 
     /**
@@ -488,6 +694,7 @@ public class FightScreen extends javax.swing.JFrame {
     private javax.swing.JButton btnSkill2Player2;
     private javax.swing.JButton btnSkill3Player1;
     private javax.swing.JButton btnSkill3Player2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel jpPVPScreen;
     private javax.swing.JLabel lblBackground;
     private javax.swing.JLabel lblPlayer1Character;
@@ -500,5 +707,6 @@ public class FightScreen extends javax.swing.JFrame {
     private javax.swing.JProgressBar pbHealthPlayer2;
     private javax.swing.JProgressBar pbStaminaPlayer1;
     private javax.swing.JProgressBar pbStaminaPlayer2;
+    private javax.swing.JTextArea txtDialogue;
     // End of variables declaration//GEN-END:variables
 }

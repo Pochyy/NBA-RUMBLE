@@ -15,36 +15,77 @@ public class Wembymama extends Character {
     }
 
     @Override
-    public void useSkill1(Character target) {
-        if (!useStamina(40)) return;
-        incrementTurnCounter();
-        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Deep Range Three!");
-        int damage = 45 + random.nextInt(26);
-        target.takeDamage(damage);
-    }
-
-    @Override
-    public void useSkill2(Character target) {
-        if (!useStamina(70)) return;
-        incrementTurnCounter();
-        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses One-Hand Slam!");
-        int damage = 70 + random.nextInt(31);
-        target.takeDamage(damage);
-    }
-
-    @Override
-    public void useSkill3(Character target) {
-        if (!useStamina(120)) return;
-        incrementTurnCounter();
-        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Celestial Slam!");
-        int damage = 100 + random.nextInt(61);
+    public String useSkill1(Character target) {
         
+        this.stamina -= getSkill1Stamina();
+        incrementTurnCounter();
+        
+        String attackMsg = "[Turn " + turnCounter + "] " + name + " uses Deep Range Three!\n";
+        int damage = 45 + random.nextInt(26);
+        String damageMsg = target.takeDamage(damage);
+        
+        return attackMsg + damageMsg;
+        
+//        OLD CODE
+//        if (!useStamina(40)) return;
+//        incrementTurnCounter();
+//        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Deep Range Three!");
+//        int damage = 45 + random.nextInt(26);
+//        target.takeDamage(damage);
+    }
+
+    @Override
+    public String useSkill2(Character target) {
+        
+        this.stamina -= getSkill2Stamina();
+        incrementTurnCounter();
+        
+        String attackMsg = "[Turn " + turnCounter + "] " + name + " uses One-Hand Slam!\n";
+        int damage = 70 + random.nextInt(31);
+        String damageMsg = target.takeDamage(damage);
+        
+        return attackMsg + damageMsg;
+        
+//        OLD CODE
+//        if (!useStamina(70)) return;
+//        incrementTurnCounter();
+//        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses One-Hand Slam!");
+//        int damage = 70 + random.nextInt(31);
+//        target.takeDamage(damage);
+    }
+
+    @Override
+    public String useSkill3(Character target) {
+        
+        this.stamina -= getSkill3Stamina();
+        incrementTurnCounter();
+        
+        String attackMsg = "[Turn " + turnCounter + "] " + name + " uses Celestial Slam!\n";
+        int damage = 100 + random.nextInt(61);
+        String critMsg = "";
+        
+        // Handle the 30% Critical Impact chance
         if (random.nextInt(100) < 30) {
             damage += 25;
-            System.out.println(" MASSIVE CRITICAL IMPACT! +25 bonus damage!");
+            critMsg = "☄️ MASSIVE CRITICAL IMPACT! +25 bonus damage!\n";
         }
         
-        target.takeDamage(damage);
+        String damageMsg = target.takeDamage(damage);
+        
+        return attackMsg + critMsg + damageMsg;
+        
+//        OLD CODE
+//        if (!useStamina(120)) return;
+//        incrementTurnCounter();
+//        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Celestial Slam!");
+//        int damage = 100 + random.nextInt(61);
+//        
+//        if (random.nextInt(100) < 30) {
+//            damage += 25;
+//            System.out.println(" MASSIVE CRITICAL IMPACT! +25 bonus damage!");
+//        }
+//        
+//        target.takeDamage(damage);
     }
 
     @Override 

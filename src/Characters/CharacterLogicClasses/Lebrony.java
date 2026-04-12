@@ -15,36 +15,81 @@ public class Lebrony extends Character {
     }
 
     @Override
-    public void useSkill1(Character target) {
-        if (!useStamina(45)) return;
-        incrementTurnCounter();
-        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Playmaker Prodigy!");
-        int damage = 55 + random.nextInt(26);
-        target.takeDamage(damage);
-    }
-
-    @Override
-    public void useSkill2(Character target) {
-        if (!useStamina(70)) return;
-        incrementTurnCounter();
-        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses King's Iron Block!");
-        int damage = 80 + random.nextInt(31);
-        target.takeDamage(damage);
-    }
-
-    @Override
-    public void useSkill3(Character target) {
-        if (!useStamina(125)) return;
-        incrementTurnCounter();
-        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses The Crowned Dime!");
-        int damage = 95 + random.nextInt(46);
-        target.takeDamage(damage);
+    public String useSkill1(Character target) {
         
+        this.stamina -= getSkill1Stamina();
+        incrementTurnCounter();
+        
+        String attackMsg = "[Turn " + turnCounter + "] " + name + " uses Playmaker Prodigy!\n";
+        
+        int damage = 55 + random.nextInt(26);
+        String damageMsg = target.takeDamage(damage);
+        
+        return attackMsg + damageMsg;
+        
+//        OLD CODE
+//        if (!useStamina(45)) return;
+//        incrementTurnCounter();
+//        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses Playmaker Prodigy!");
+//        int damage = 55 + random.nextInt(26);
+//        target.takeDamage(damage);
+    }
+
+    @Override
+    public String useSkill2(Character target) {
+        
+        this.stamina -= getSkill3Stamina();
+        incrementTurnCounter();
+        
+        String attackMsg = "[Turn " + turnCounter + "] " + name + " uses The Crowned Dime!\n";
+        
+        int damage = 95 + random.nextInt(46);
+        String damageMsg = target.takeDamage(damage);
+        
+        String followUpMsg = "";
+        
+        // Handle the 65% chance for a Follow-Up Attack
         if (random.nextInt(100) < 65) {
-            System.out.println(" FOLLOW-UP ATTACK TRIGGERED!");
             int followUpDamage = 45 + random.nextInt(31);
-            target.takeDamage(followUpDamage);
+            // Notice we call takeDamage AGAIN to calculate the second hit!
+            followUpMsg = "\n👑 FOLLOW-UP ATTACK TRIGGERED!\n" + target.takeDamage(followUpDamage);
         }
+        
+        return attackMsg + damageMsg + followUpMsg;
+        
+//        OLD CODE
+//        if (!useStamina(70)) return;
+//        incrementTurnCounter();
+//        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses King's Iron Block!");
+//        int damage = 80 + random.nextInt(31);
+//        target.takeDamage(damage);
+    }
+
+    @Override
+    public String useSkill3(Character target) {
+        
+        this.stamina -= getSkill2Stamina();
+        incrementTurnCounter();
+        
+        String attackMsg = "[Turn " + turnCounter + "] " + name + " uses King's Iron Block!\n";
+        
+        int damage = 80 + random.nextInt(31);
+        String damageMsg = target.takeDamage(damage);
+        
+        return attackMsg + damageMsg;
+        
+//        OLD CODE
+//        if (!useStamina(125)) return;
+//        incrementTurnCounter();
+//        System.out.println("\n[Turn " + turnCounter + "] " + name + " uses The Crowned Dime!");
+//        int damage = 95 + random.nextInt(46);
+//        target.takeDamage(damage);
+//        
+//        if (random.nextInt(100) < 65) {
+//            System.out.println(" FOLLOW-UP ATTACK TRIGGERED!");
+//            int followUpDamage = 45 + random.nextInt(31);
+//            target.takeDamage(followUpDamage);
+//        }
     }
 
     @Override 
