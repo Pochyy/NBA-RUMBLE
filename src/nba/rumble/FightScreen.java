@@ -4,6 +4,7 @@
  */
 package nba.rumble;
 
+
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import Characters.CharacterLogicClasses.Character;
@@ -22,6 +23,10 @@ public class FightScreen extends javax.swing.JFrame {
     //Added another global variable, specifically for PVE (Prime)
     private boolean isPVE = false; // Add this variable to track the mode
     private String botDifficulty = "Medium"; // New variable for Bot Difficulty
+    
+    //Gallardo : ARCADE MODE VARIABLES 
+    private boolean isArcadeMode = false;
+    private CharacterSelectScreen arcadeParentScreen;
     
     public FightScreen(Character p1, Character p2, boolean isPVE, String botDifficulty){
         initComponents();
@@ -55,6 +60,26 @@ public class FightScreen extends javax.swing.JFrame {
         
         toggleButtons(); // Ensures P1 starts enabled and P2 starts disabled
    
+    }
+    
+    //GALLARDO - ARCADE MODE METHODS 
+    public void setArcadeMode(boolean isArcade, CharacterSelectScreen parent){
+        this.isArcadeMode = isArcade;
+        this.arcadeParentScreen = parent;
+    }
+    
+    private void endMatchArcade(){
+        if(isArcadeMode && arcadeParentScreen != null){
+            
+            boolean playerWon = (player1Character.getHp() > 0);
+            Character lastOpponent = player2Character;
+            this.dispose();
+            arcadeParentScreen.onArcadeBattleEnd(playerWon, lastOpponent);
+        }else{
+            //to menu
+            new MenuScreen().setVisible(true);
+            this.dispose();
+        }
     }
     
     public FightScreen() {
@@ -240,6 +265,7 @@ public class FightScreen extends javax.swing.JFrame {
     private void handleInsufficientStamina(Character player, Character opponent, boolean isPlayer1) {
         // Calculate recovery amount (15-20% of max stamina)
         int recoveryAmount = player.getMaxStamina() / 6;
+        
         if (recoveryAmount < 10) recoveryAmount = 10;
         if (recoveryAmount > 30) recoveryAmount = 30;
         
@@ -311,10 +337,16 @@ public class FightScreen extends javax.swing.JFrame {
 
         // 2. Check if someone won the whole Match (Best of 3 = 2 wins)
         if (p1RoundWins == 2) {
+            
+            if(!isArcadeMode){
             javax.swing.JOptionPane.showMessageDialog(this, "CONGRATULATIONS: PLAYER 1 IS THE CHAMPION!");
+            }
             endMatch();
         } else if (p2RoundWins == 2) {
+            
+            if(!isArcadeMode){
             javax.swing.JOptionPane.showMessageDialog(this, "CONGRATULATIONS: PLAYER 2 IS THE CHAMPION!");
+            }
             endMatch();
         } else {
             // 3. If no one has 2 wins, reset for the next round
@@ -339,8 +371,13 @@ public class FightScreen extends javax.swing.JFrame {
     
     private void endMatch() {
         // This takes the player back to the selection screen or menu
-        new MenuScreen().setVisible(true);
-        this.dispose();
+        if(isArcadeMode){
+            endMatchArcade();
+        }else{
+            //Normal mode to go to menu
+            new MenuScreen().setVisible(true);
+            this.dispose();
+        }
     }
     
     // if ganahan mo mag disable ug controls, turn off comments and use this

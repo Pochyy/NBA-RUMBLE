@@ -8,6 +8,9 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import Characters.CharacterLogicClasses.Character;
 import Characters.CharacterLogicClasses.AirJordan;
@@ -33,9 +36,15 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
     // true = Bot picks itself, false = Player picks for Bot
     private boolean doesBotPickRandom = true;
     
-//    UPDATED: PRIME (04/12/2026)
+    //UPDATED: PRIME (04/12/2026)
     // doesBotPickRandom variable default difficulty is set to Medium
     private String botDifficulty = "Medium";
+    
+    private List<Character> arcadeOpponents;
+    private int currentOpponentIndex = 0;
+    private Character playerArcadeCharacter;
+    private String arcadeDifficulty = "Medium";
+    
     
     private void startFight(){
         
@@ -82,8 +91,31 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
         pnlPVP.setVisible(false);
         
         switch(mode){
+            
             case"PVP" -> pnlPVP.setVisible(true);
-            case"Arcade" -> pnlArcade.setVisible(true);
+            
+            case"Arcade" -> {pnlArcade.setVisible(true);
+                //Mo reset arcade progress when entering arcade mode
+                
+                currentOpponentIndex = 0;
+                playerArcadeCharacter = null;
+                
+                //DIFFICULTY SELECTION
+                Object[] diffOptions = {"Easy", "Medium", "Hard"};
+                int diffChoice = javax.swing.JOptionPane.showOptionDialog(this, "Select Difficulty: ", "Arcade Difficulty", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, diffOptions, diffOptions[1]);
+                
+                if(diffChoice == 0){
+                    arcadeDifficulty = "Easy";
+                } else if(diffChoice == 1){
+                    arcadeDifficulty = "Medium";                
+                } else if(diffChoice == 2){
+                    arcadeDifficulty = "Hard";
+                } else{
+                    arcadeDifficulty = "Medium"; //Default if closed
+                }
+                
+                System.out.println("Arcade Difficulty selected: "+ arcadeDifficulty);
+            }
             case"PVE" -> /*pnlPVE.setVisible(true); OLD CODE*/
                 
 //                NEWER CODE FOR BOT IMPLEMENTATION
@@ -178,6 +210,29 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
         String path = selectedCharacter.getImagePath();
         ImageIcon icon = new ImageIcon(getClass().getResource(path));
         
+        
+        //GALLARDO: ARCADE MODE (ADDED)
+        if(pnlArcade.isVisible()){
+            
+            if(isPlayer1Turn){
+                
+                //Only one player can pick a Character since its Arcade.
+                
+                Image img = icon.getImage().getScaledInstance(lblChc6.getWidth(), lblChc6.getHeight(), Image.SCALE_DEFAULT);
+                lblChc6.setIcon(new ImageIcon(img));
+                playerArcadeCharacter = selectedCharacter;
+                player1Character = selectedCharacter;
+                player1Picked = true;
+                
+                //Generate opponents except sa imong ge pick na character
+                
+                generateArcadeOpponents(selectedCharacter);
+                
+                startArcadeFight();
+                
+            }
+            return;
+        }
         
         // ADD PANEL LOGIC 
         //PVE MODE (PRIME'S PART)
@@ -330,6 +385,102 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
     }
     
     */
+    
+    //GALLARDO : FOR THE ARCADE METHODS 
+    // Mo generate ni siya sa list of opponents para sa arcade
+    private void generateArcadeOpponents(Character playerCharacter){
+        
+        List<Character> allCharacters = new ArrayList<>();
+        
+        allCharacters.add(new AirJordan());
+        allCharacters.add(new Kowbe());
+        allCharacters.add(new Lebrony());
+        allCharacters.add(new Luca());
+        allCharacters.add(new Wembymama());
+        allCharacters.add(new LarryBird());
+        allCharacters.add(new ShakeroNiel());
+        allCharacters.add(new ChefCurry());
+        
+        //removes the character the player chose
+        String playerName = playerCharacter.getName();
+        allCharacters.removeIf(character -> character.getName().equals(playerName));
+        
+        //para mo shuffle ni siya sa opponents in a random order
+        Collections.shuffle(allCharacters);
+        
+        arcadeOpponents = allCharacters;
+        currentOpponentIndex = 0;
+        
+        System.out.println("Arcade  Mode Started! You will face " + arcadeOpponents.size() + " opponents.");
+        
+        for(int i = 0; i < arcadeOpponents.size(); i++){
+            System.out.println(" Opponent " + (i+1) + ": " + arcadeOpponents.get(i).getName());
+        }
+    }
+    
+    //GALLARDO : still a method for arcade (newly added)
+    private void startArcadeFight(){
+        
+        //Checks if you have beaten all opponents
+        if(currentOpponentIndex >= arcadeOpponents.size()){
+            
+            javax.swing.JOptionPane.showMessageDialog(this, "You have defeated all 7 opponents!\nYou are the ARCADE CHAMPION!!!",
+                "ARCADE VICTORY!", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            
+            //Gets you back to main menu 
+            new MenuScreen().setVisible(true);
+            this.dispose();
+            return;
+        }
+        
+        //Gets the current opponent
+        Character currentOpponent = arcadeOpponents.get(currentOpponentIndex);
+        player2Character = currentOpponent;
+        
+        //Shows a message before the fight
+        int roundNumber = currentOpponentIndex + 1;
+        javax.swing.JOptionPane.showMessageDialog(this, "ARCADE BATTLE " + roundNumber + " OF 7 \n\n" + "Your next opponent: " + currentOpponent.getName() + "!\n" + "Goodluck!", "Arcade Mode", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        
+        //to show the fightscreen with the applied arcade mode enabled
+        FightScreen fightscreen = new FightScreen(player1Character, player2Character, true, arcadeDifficulty);
+        fightscreen.setArcadeMode(true, this); 
+        
+        fightscreen.setVisible(true);
+        this.dispose();
+    }
+    
+    public void onArcadeBattleEnd(boolean playerWon, Character opponent){
+        if(playerWon){
+            //if you won, this will move you to the next round
+            currentOpponentIndex++;
+            
+            //resets player stats taga new opponent
+            player1Character.resetStats();
+            
+            //Show progress message
+            javax.swing.JOptionPane.showMessageDialog(null, "VICTORY! You defeated " + opponent.getName() + "!\n" + "Progress: " + currentOpponentIndex + " / 7 opponents defeated.", "Arcade Progress", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            
+            //Starts the next battle
+            startArcadeFight();
+        }else{
+            //If you lost, it will ask you if you want to retry or quit
+            Object[] options = {"Retry", "Quit"};
+            int choice = javax.swing.JOptionPane.showOptionDialog(null, "DEFEATED! You were defeated by " + opponent.getName() + ".\n" + "Progress: " + currentOpponentIndex + " / 7 opponents defeated.\n\n" + "What would you like to do?", "Arcade Mode - Game Over", javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+            
+            if(choice == 0){
+                //Retry the same opponent
+                
+                //reset stats
+                player1Character.resetStats();
+                
+                startArcadeFight();
+            }else{
+                //Quit back to main menu 
+                new MenuScreen().setVisible(true);
+                this.dispose();
+            }
+        }
+    }  // END OF 3 METHODS ADDED 
     
     private void setupCharacterButtons(javax.swing.JButton btn, String characterPath){
         ImageIcon icon = new ImageIcon(getClass().getResource(characterPath));
