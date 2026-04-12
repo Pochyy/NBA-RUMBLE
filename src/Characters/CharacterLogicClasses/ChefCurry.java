@@ -16,6 +16,21 @@ public class ChefCurry extends Character {
     //C:\Users\lario\OneDrive\Documents\NetBeansProjects\NBA RUMBLE\src\Characters\StephenCurry\stephcurry.gif
     
     @Override
+    public String getSkill1Gif(){
+        return "/Characters/StephenCurry/steph_skill1.gif";
+    }
+    
+    @Override
+    public String getSkill2Gif(){
+        return "/Characters/StephenCurry/steph_skill2.gif";
+    }
+    
+    @Override
+    public String getSkill3Gif(){
+        return "/Characters/StephenCurry/steph_ult.gif";
+    }
+    
+    @Override
     public String useSkill1(Character target) {
         
         // Deduct stamina and advance turn counter

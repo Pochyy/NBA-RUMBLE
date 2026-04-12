@@ -13,6 +13,21 @@ public class Wembymama extends Character {
     public String getImagePath(){
         return "/Characters/Wembayama/wembyra.gif";
     }
+    
+    @Override
+    public String getSkill1Gif(){
+        return "/Characters/Wembayama/wemba_skill1.gif";
+    }
+    
+    @Override
+    public String getSkill2Gif(){
+        return "/Characters/Wembayama/wemba_skill2.gif";
+    }
+    
+    @Override
+    public String getSkill3Gif(){
+        return "/Characters/Wembayama/wemba_ult.gif";
+    }
 
     @Override
     public String useSkill1(Character target) {

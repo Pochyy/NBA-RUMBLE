@@ -15,6 +15,21 @@ public class ShakeroNiel extends Character {
     public String getImagePath(){
         return "/Characters/ShackONiel/shaq.gif";
     }
+    
+    @Override
+    public String getSkill1Gif(){
+        return "/Characters/ShackONiel/shaq_skill1.gif";
+    }
+    
+    @Override
+    public String getSkill2Gif(){
+        return "/Characters/ShackONiel/shaq_skill2.gif";
+    }
+    
+    @Override
+    public String getSkill3Gif(){
+        return "/Characters/ShackONiel/shaq_ult.gif";
+    }
 
     @Override
     public String useSkill1(Character target) {

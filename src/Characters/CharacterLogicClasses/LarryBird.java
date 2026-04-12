@@ -13,6 +13,21 @@ public class LarryBird extends Character {
     public String getImagePath(){
         return "/Characters/LarryBird/larrybird.gif";
     }
+    
+    @Override
+    public String getSkill1Gif(){
+        return "/Characters/LarryBird/larry_skill1.gif";
+    }
+    
+    @Override
+    public String getSkill2Gif(){
+        return "/Characters/LarryBird/larry_skill2.gif";
+    }
+    
+    @Override
+    public String getSkill3Gif(){
+        return "/Characters/LarryBird/larry_ult.gif";
+    }
 
     @Override
     public String useSkill1(Character target) {

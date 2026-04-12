@@ -34,6 +34,7 @@ public abstract class Character {
     
     
     public abstract String getImagePath();
+    
 
     public String takeDamage(int damage) {
         hp -= damage;
@@ -136,6 +137,9 @@ public abstract class Character {
     public abstract String useSkill1(Character target);
     public abstract String useSkill2(Character target);
     public abstract String useSkill3(Character target);
+    public abstract String getSkill1Gif();
+    public abstract String getSkill2Gif();
+    public abstract String getSkill3Gif();
     public abstract String getSkill1Name();
     public abstract String getSkill2Name();
     public abstract String getSkill3Name();

@@ -15,6 +15,21 @@ public class Luca extends Character {
         return "/Characters/Luca/luka.gif"; 
         
     }
+    
+    @Override
+    public String getSkill1Gif(){
+        return "/Characters/Luca/luka_skill1.gif";
+    }
+    
+    @Override
+    public String getSkill2Gif(){
+        return "/Characters/Luca/luka_skill2.gif";
+    }
+    
+    @Override
+    public String getSkill3Gif(){
+        return "/Characters/Luca/luka_ult.gif";
+    }
 
     @Override
     public String useSkill1(Character target) {

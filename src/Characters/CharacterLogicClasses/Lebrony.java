@@ -13,6 +13,21 @@ public class Lebrony extends Character {
     public String getImagePath(){
         return "/Characters/Lebron/lebron.gif";
     }
+    
+    @Override
+    public String getSkill1Gif(){
+        return "/Characters/Lebron/lebron_skill1.gif";
+    }
+    
+    @Override
+    public String getSkill2Gif(){
+        return "/Characters/Lebron/lebron_skill2.gif";
+    }
+    
+    @Override
+    public String getSkill3Gif(){
+        return "/Characters/Lebron/lebron_ult.gif";
+    }
 
     @Override
     public String useSkill1(Character target) {

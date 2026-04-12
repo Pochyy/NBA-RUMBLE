@@ -244,14 +244,32 @@ public class FightScreen extends javax.swing.JFrame {
         checkGameOver();
         
     }
+    
+    private ImageIcon player1DefaultIcon;
+    private ImageIcon player2DefaultIcon;
+    
     private void setCharacterImages() {
-        // Player 1
-        ImageIcon icon1 = new ImageIcon(getClass().getResource(player1Character.getImagePath()));
-        lblPlayer1Character.setIcon(icon1); // JLabel for Player 1
 
-        // Player 2
-        ImageIcon icon2 = new ImageIcon(getClass().getResource(player2Character.getImagePath()));
-        lblPlayer2Character.setIcon(icon2); // JLabel for Player 2
+        player1DefaultIcon = new ImageIcon(
+            getClass().getResource(player1Character.getImagePath()));
+        lblPlayer1Character.setIcon(player1DefaultIcon);
+
+        player2DefaultIcon = new ImageIcon(
+            getClass().getResource(player2Character.getImagePath()));
+        lblPlayer2Character.setIcon(player2DefaultIcon);
+    }
+    
+    private void playSkillAnimation(javax.swing.JLabel label,String gifPath,ImageIcon defaultIcon) {
+        
+    ImageIcon gif = new ImageIcon(getClass().getResource(gifPath));
+    label.setIcon(gif);
+
+    javax.swing.Timer timer = new javax.swing.Timer(1500, e -> {
+        label.setIcon(defaultIcon);
+    });
+
+    timer.setRepeats(false);
+    timer.start();
     }
     
     
@@ -418,6 +436,7 @@ public class FightScreen extends javax.swing.JFrame {
         btnSkill3Player2 = new javax.swing.JButton();
         lblPlayer1Character = new javax.swing.JLabel();
         lblPlayer2Character = new javax.swing.JLabel();
+        lbltxtDialogueFrame = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDialogue = new javax.swing.JTextArea();
         lblBackground = new javax.swing.JLabel();
@@ -535,6 +554,9 @@ public class FightScreen extends javax.swing.JFrame {
         lblPlayer2Character.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
         jpPVPScreen.add(lblPlayer2Character, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 260, 440, 430));
 
+        lbltxtDialogueFrame.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/textdialogue.png"))); // NOI18N
+        jpPVPScreen.add(lbltxtDialogueFrame, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 710, 1200, 150));
+
         txtDialogue.setEditable(false);
         txtDialogue.setBackground(new java.awt.Color(0, 0, 0));
         txtDialogue.setColumns(20);
@@ -565,6 +587,7 @@ public class FightScreen extends javax.swing.JFrame {
         handleInsufficientStamina(player1Character, player2Character, true);
         return;
         }
+        
         player1Character.useSkill1(player2Character);
 
         // Catch the returned text from the skill
@@ -572,6 +595,8 @@ public class FightScreen extends javax.swing.JFrame {
 
         // Put it in the GUI!
         appendDialogue(battleLog + "\n--------------------");
+        
+            playSkillAnimation(lblPlayer1Character, player1Character.getSkill1Gif(), player1DefaultIcon);
 
         updateBars();
         isPlayer1Turn = false;
@@ -590,6 +615,8 @@ public class FightScreen extends javax.swing.JFrame {
         
         // Put it in the GUI!
         appendDialogue(battleLog + "\n--------------------");
+        
+        playSkillAnimation(lblPlayer1Character, player1Character.getSkill3Gif(), player1DefaultIcon);
         
         updateBars();
         isPlayer1Turn = false;
@@ -625,6 +652,8 @@ public class FightScreen extends javax.swing.JFrame {
         // Put it in the GUI!
         appendDialogue(battleLog + "\n--------------------");
         
+        playSkillAnimation(lblPlayer1Character, player1Character.getSkill2Gif(), player1DefaultIcon);
+        
         updateBars();
         isPlayer1Turn = false;
         toggleButtons();
@@ -652,6 +681,8 @@ public class FightScreen extends javax.swing.JFrame {
         String battleLog = player2Character.useSkill1(player1Character);
         appendDialogue(battleLog + "\n--------------------");
         
+        playSkillAnimation(lblPlayer2Character, player2Character.getSkill1Gif(), player2DefaultIcon);
+        
         updateBars();
         isPlayer1Turn = true;
         toggleButtons();      // Update the buttons
@@ -668,6 +699,8 @@ public class FightScreen extends javax.swing.JFrame {
         String battleLog = player2Character.useSkill2(player1Character);
         appendDialogue(battleLog + "\n--------------------");
         
+        playSkillAnimation(lblPlayer2Character, player2Character.getSkill2Gif(), player2DefaultIcon);
+        
         updateBars();
         isPlayer1Turn = true;
         toggleButtons();      // Update the buttons
@@ -683,6 +716,8 @@ public class FightScreen extends javax.swing.JFrame {
         // GUI IMPLEMENTATION (DIALOGUE BOX)
         String battleLog = player2Character.useSkill3(player1Character);
         appendDialogue(battleLog + "\n--------------------");
+        
+        playSkillAnimation(lblPlayer2Character, player2Character.getSkill3Gif(), player2DefaultIcon);
         
         updateBars();
         isPlayer1Turn = true;
@@ -740,6 +775,7 @@ public class FightScreen extends javax.swing.JFrame {
     private javax.swing.JLabel lblPlayer2Character;
     private javax.swing.JLabel lblPlayer2HealthBar;
     private javax.swing.JLabel lblPlayer2StaminaBar;
+    private javax.swing.JLabel lbltxtDialogueFrame;
     private javax.swing.JProgressBar pbHealthPlayer1;
     private javax.swing.JProgressBar pbHealthPlayer2;
     private javax.swing.JProgressBar pbStaminaPlayer1;

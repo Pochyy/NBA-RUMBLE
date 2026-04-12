@@ -14,6 +14,21 @@ public class Kowbe extends Character {
     public String getImagePath(){
         return "/Characters/Kobe/kowbe.gif";
     }
+    
+    @Override
+    public String getSkill1Gif(){
+        return "/Characters/Kobe/kobe_skill1.gif";
+    }
+    
+    @Override
+    public String getSkill2Gif(){
+        return "/Characters/Kobe/kobe_skill2.gif";
+    }
+    
+    @Override
+    public String getSkill3Gif(){
+        return "/Characters/Kobe/kobe_utl.gif";
+    }
 
     @Override
     public String useSkill1(Character target) {
