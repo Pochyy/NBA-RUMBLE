@@ -110,7 +110,7 @@ public class FightScreen extends javax.swing.JFrame {
             boolean skillUsed = false;
             
             // === EASY MODE: Random Decision ===
-            
+            // BOTS IN EASY HAS ALSO ITS GIF ANIMATIONS IMPLEMENTED (PRIME)
 //          UPDATED CODE (PRIME)
             if (botDifficulty.equals("Easy")) {
                 int randomSkill = (int)(Math.random() * 3) + 1; // Picks 1, 2, or 3
@@ -118,14 +118,17 @@ public class FightScreen extends javax.swing.JFrame {
                 if (randomSkill == 3 && player2Character.getStamina() >= player2Character.getSkill3Stamina()) {
                     String botLog = player2Character.useSkill3(player1Character); 
                     appendDialogue(botLog + "\n--------------------");
+                    playSkillAnimation(lblPlayer2Character, player2Character.getSkill3Gif(), player2DefaultIcon);
                     skillUsed = true;
                 } else if (randomSkill >= 2 && player2Character.getStamina() >= player2Character.getSkill2Stamina()) {
                     String botLog = player2Character.useSkill2(player1Character); 
                     appendDialogue(botLog + "\n--------------------");
+                    playSkillAnimation(lblPlayer2Character, player2Character.getSkill2Gif(), player2DefaultIcon);
                     skillUsed = true;
                 } else if (player2Character.getStamina() >= player2Character.getSkill1Stamina()) {
                     String botLog = player2Character.useSkill1(player1Character); 
                     appendDialogue(botLog + "\n--------------------");
+                    playSkillAnimation(lblPlayer2Character, player2Character.getSkill1Gif(), player2DefaultIcon);
                     skillUsed = true;
                 }
             }
@@ -154,6 +157,7 @@ public class FightScreen extends javax.swing.JFrame {
             }
 
             // === MEDIUM MODE (And Fallback for Easy/Hard) ===
+            // BOT GIF ANIMATIONS HAVE NOW BEEN IMPLEMENTED (PRIME)
             if (!skillUsed) {
                 if (player2Character.getStamina() >= player2Character.getSkill3Stamina()) {
                     
@@ -162,6 +166,9 @@ public class FightScreen extends javax.swing.JFrame {
                     appendDialogue(botLog + "\n--------------------");
                     //player2Character.useSkill3(player1Character);
                     
+                    // BOT NOW IMPLEMENTS ITS RESPECTIVE GIF SKILL 3 ANIMATION
+                    playSkillAnimation(lblPlayer2Character, player2Character.getSkill3Gif(), player2DefaultIcon);
+                    
                 } else if (player2Character.getStamina() >= player2Character.getSkill2Stamina()) {
                     
                     // Catch the Bot's attack text
@@ -169,13 +176,18 @@ public class FightScreen extends javax.swing.JFrame {
                     appendDialogue(botLog + "\n--------------------");
                     
 //                    player2Character.useSkill2(player1Character);
+                    // BOT NOW IMPLEMENTS ITS RESPECTIVE GIF SKILL 2 ANIMATION
+                    playSkillAnimation(lblPlayer2Character, player2Character.getSkill2Gif(), player2DefaultIcon);   
+                    
                 } else if (player2Character.getStamina() >= player2Character.getSkill1Stamina()) {
                     
                     // Catch the Bot's attack text
                     String botLog = player2Character.useSkill1(player1Character);
-                    appendDialogue(botLog + "\n--------------------");
-                    
-                    player2Character.useSkill1(player1Character);
+                    appendDialogue(botLog + "\n--------------------");                    
+//                    player2Character.useSkill1(player1Character);
+
+                    // BOT NOW IMPLEMENTS ITS RESPECTIVE GIF SKILL 1 ANIMATION
+                    playSkillAnimation(lblPlayer2Character, player2Character.getSkill1Gif(), player2DefaultIcon);
                 } else {
                     // Out of stamina, must rest
                     handleInsufficientStamina(player2Character, player1Character, false);
@@ -260,9 +272,19 @@ public class FightScreen extends javax.swing.JFrame {
     }
     
     private void playSkillAnimation(javax.swing.JLabel label,String gifPath,ImageIcon defaultIcon) {
-        
-    ImageIcon gif = new ImageIcon(getClass().getResource(gifPath));
-    label.setIcon(gif);
+    
+    java.net.URL imgURL = getClass().getResource(gifPath);
+        if (imgURL != null) {
+            // Forces Java to clear its cache of this image, to restart the GIF (PRIME)
+            Image img = java.awt.Toolkit.getDefaultToolkit().createImage(imgURL);
+            img.flush(); 
+            
+            ImageIcon gif = new ImageIcon(img);
+            label.setIcon(gif);
+        }
+    
+//    ImageIcon gif = new ImageIcon(getClass().getResource(gifPath));
+//    label.setIcon(gif);
 
     javax.swing.Timer timer = new javax.swing.Timer(1500, e -> {
         label.setIcon(defaultIcon);
