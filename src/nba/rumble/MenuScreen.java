@@ -12,7 +12,10 @@ import javax.swing.ImageIcon;
  * @author lario
  */
 public class MenuScreen extends javax.swing.JFrame {
-
+    
+    
+    private AboutScreen aboutScreen = null;
+    
     /**
      * Creates new form MenuScreen
      */
@@ -36,10 +39,10 @@ public class MenuScreen extends javax.swing.JFrame {
         btnPVP = new javax.swing.JButton();
         btnPVE = new javax.swing.JButton();
         btnArcade = new javax.swing.JButton();
+        AboutButton = new javax.swing.JButton();
         lblMenuScreen = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(1920, 1080));
         setMinimumSize(new java.awt.Dimension(1920, 1080));
         setSize(new java.awt.Dimension(1920, 1080));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -67,6 +70,18 @@ public class MenuScreen extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnArcade, new org.netbeans.lib.awtextra.AbsoluteConstraints(1410, 730, 440, 190));
+
+        AboutButton.setBackground(new java.awt.Color(102, 102, 102));
+        AboutButton.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 12)); // NOI18N
+        AboutButton.setForeground(new java.awt.Color(255, 255, 255));
+        AboutButton.setText("ABOUT");
+        AboutButton.setBorder(null);
+        AboutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AboutButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(AboutButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(1830, 10, 70, 30));
 
         lblMenuScreen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Backgrounds/mainmenu.png"))); // NOI18N
         lblMenuScreen.setMaximumSize(new java.awt.Dimension(1920, 1080));
@@ -106,6 +121,19 @@ public class MenuScreen extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnArcadeActionPerformed
 
+    private void AboutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AboutButtonActionPerformed
+        // TODO add your handling code here:
+        
+            if (aboutScreen == null || !aboutScreen.isVisible()) {
+            aboutScreen = new AboutScreen();
+            aboutScreen.setVisible(true);
+        } else {
+        
+        aboutScreen.toFront();
+        }
+
+    }//GEN-LAST:event_AboutButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -142,6 +170,7 @@ public class MenuScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AboutButton;
     private javax.swing.JButton btnArcade;
     private javax.swing.JButton btnPVE;
     private javax.swing.JButton btnPVP;
