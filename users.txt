@@ -2,3 +2,5 @@ Prime,123,0
 ken,123,0
 sd23as,sadawdaw,0
 das,wad,0
+prime,123,0
+P,123,0

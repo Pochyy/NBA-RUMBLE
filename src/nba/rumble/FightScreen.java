@@ -18,6 +18,15 @@ public class FightScreen extends javax.swing.JFrame {
     private int p1RoundWins = 0; //Round Counters
     private int p2RoundWins = 0;
     
+    //PRIME - match timers
+    private int currentRound = 1;
+    private int matchTimeInSeconds = 0;
+    private javax.swing.Timer matchTimer;
+    
+    private javax.swing.Timer turnTimer;
+    private int turnTimeRemaining = 20;
+    //----------------------
+    
     private Character player1Character;
     private Character player2Character;
     
@@ -39,9 +48,23 @@ public class FightScreen extends javax.swing.JFrame {
         this.isPVE = isPVE; // Save the mode so the rest of the class can use it
         this.botDifficulty = botDifficulty; // Saves it to the class "CharacterSelectScreen"
         
+        //PRIME - displays the Players' name and the character name the players picked correctly
+        lblPlayer1CharName.setText(player1Character.getName());
+        lblPlayer2CharName.setText(player2Character.getName());
+        lblPlayer1Name.setText("Player 1");
+        
+        if (isPVE) {
+            // If it's PVE, Player 2's name plate becomes "Bot"
+            lblPlayer2Name.setText("Bot");
+        } else {
+            // If it's normal PVP, it becomes "Player 2"
+            lblPlayer2Name.setText("Player 2");
+        }
+        //----------------
+        
         setCharacterImages();
         setSkillNames();
-        
+
         //Player 1 stats.
         //Set Health value for the Health Bar
         pbHealthPlayer1.setMaximum(player1Character.getMaxHp());
@@ -60,24 +83,87 @@ public class FightScreen extends javax.swing.JFrame {
         pbStaminaPlayer2.setMaximum(player2Character.getMaxStamina());
         pbStaminaPlayer2.setValue(player2Character.getStamina());
         
+        // PRIME -  TIMER LOGIC
+        lblRoundCounter.setText("Round " + currentRound);
+        
+        // timer triggers every 1000 milliseconds (1 second)
+        matchTimer = new javax.swing.Timer(1000, e -> {
+            matchTimeInSeconds++;
+            // Convert raw seconds into a nice 00:00 format
+            int minutes = matchTimeInSeconds / 60;
+            int seconds = matchTimeInSeconds % 60;
+            // Updates the GUI label you created
+            lblMatchTimer.setText(String.format("%02d:%02d", minutes, seconds));
+        });
+        matchTimer.start();
+        
+        lblTurnTimer.setText("20");
+        turnTimer = new javax.swing.Timer(1000, e -> {
+            turnTimeRemaining--;
+            lblTurnTimer.setText(String.valueOf(turnTimeRemaining));
+
+            if (turnTimeRemaining <= 0) {
+                handleTurnTimeout();
+            }
+        });
+
+        turnTimer.start();
+        //---------------------------------
         
         toggleButtons(); // Ensures P1 starts enabled and P2 starts disabled
    
     }
     
+    private void handleTurnTimeout() {
+        turnTimer.stop();
+
+        String currentPlayer = isPlayer1Turn ? player1Character.getName() : player2Character.getName();
+        appendDialogue(currentPlayer + " took too long! Turn skipped.\n--------------------");
+
+        isPlayer1Turn = !isPlayer1Turn;
+
+        resetTurnTimer();
+        toggleButtons();
+    }
+    
+    private void resetTurnTimer() {
+        turnTimeRemaining = 20;
+        if (lblTurnTimer != null) {
+            lblTurnTimer.setText(String.valueOf(turnTimeRemaining));
+        }
+        if (turnTimer != null) {
+            turnTimer.restart();
+        }
+    }
+    
     //GALLARDO - ARCADE MODE METHODS 
-    public void setArcadeMode(boolean isArcade, CharacterSelectScreen parent){
+    public void setArcadeMode(boolean isArcade, CharacterSelectScreen parent, int matchNumber){
         this.isArcadeMode = isArcade;
         this.arcadeParentScreen = parent;
+        
+        //PRIME - Player 2 names to Enemy # depending on what enemy # it is
+        if(this.isArcadeMode){
+            // Overwrites the "Bot" text from the constructor
+            lblPlayer2Name.setText("Enemy #" + matchNumber);
+        }
+        //--------------------------
+        
     }
     
     private void endMatchArcade(){
+//        if(isArcadeMode && arcadeParentScreen != null){
+//            
+//            boolean playerWon = (player1Character.getHp() > 0);
+//            Character lastOpponent = player2Character;
+//            this.dispose();
+//            arcadeParentScreen.onArcadeBattleEnd(playerWon, lastOpponent);
+//        }
+
         if(isArcadeMode && arcadeParentScreen != null){
-            
             boolean playerWon = (player1Character.getHp() > 0);
-            Character lastOpponent = player2Character;
             this.dispose();
-            arcadeParentScreen.onArcadeBattleEnd(playerWon, lastOpponent);
+            // Pass matchTimeInSeconds as the 3rd argument
+            arcadeParentScreen.onArcadeBattleEnd(playerWon, player2Character, matchTimeInSeconds);
         }else{
             //to menu
             new MenuScreen().setVisible(true);
@@ -340,34 +426,25 @@ public class FightScreen extends javax.swing.JFrame {
     
     
     private void toggleButtons() {
-        // Player 1's buttons are active ONLY if it is Player 1's turn
+        resetTurnTimer();
+
         btnSkill1Player1.setEnabled(isPlayer1Turn);
         btnSkill2Player1.setEnabled(isPlayer1Turn);
         btnSkill3Player1.setEnabled(isPlayer1Turn);
 
-        // PVE Bot Behavior is implemented here (Prime)
         if (isPVE) {
-            // PVE MODE: Keep Player 2's UI buttons visually disabled so the user can't click them
             btnSkill1Player2.setEnabled(false);
             btnSkill2Player2.setEnabled(false);
             btnSkill3Player2.setEnabled(false);
-            
-            // If it's NOT Player 1's turn, that means it's the Bot's turn.
+
             if (!isPlayer1Turn && player1Character.getHp() > 0 && player2Character.getHp() > 0) {
                 executeBotTurn();
             }
         } else {
-            // PVP MODE (Your Original Logic)
             btnSkill1Player2.setEnabled(!isPlayer1Turn);
             btnSkill2Player2.setEnabled(!isPlayer1Turn);
             btnSkill3Player2.setEnabled(!isPlayer1Turn);
         }
-        
-        
-        // Player 2's buttons are active ONLY if it is NOT Player 1's turn
-        btnSkill1Player2.setEnabled(!isPlayer1Turn);
-        btnSkill2Player2.setEnabled(!isPlayer1Turn);
-        btnSkill3Player2.setEnabled(!isPlayer1Turn);
     }
     
     private void checkGameOver() {
@@ -381,40 +458,38 @@ public class FightScreen extends javax.swing.JFrame {
     }
 
     private void processRoundEnd(String message) {
-        // 1. Show who won the round
+        if (matchTimer != null) matchTimer.stop();
+        if (turnTimer != null) turnTimer.stop();
+
         javax.swing.JOptionPane.showMessageDialog(this, message + "\nScore: P1 [" + p1RoundWins + "] - P2 [" + p2RoundWins + "]");
 
-        // 2. Check if someone won the whole Match (Best of 3 = 2 wins)
         if (p1RoundWins == 2) {
-            
             if(!isArcadeMode){
-            javax.swing.JOptionPane.showMessageDialog(this, "CONGRATULATIONS: PLAYER 1 IS THE CHAMPION!");
+                javax.swing.JOptionPane.showMessageDialog(this, "CONGRATULATIONS: PLAYER 1 IS THE CHAMPION!");
             }
             endMatch();
         } else if (p2RoundWins == 2) {
-            
             if(!isArcadeMode){
-            javax.swing.JOptionPane.showMessageDialog(this, "CONGRATULATIONS: PLAYER 2 IS THE CHAMPION!");
+                javax.swing.JOptionPane.showMessageDialog(this, "CONGRATULATIONS: PLAYER 2 IS THE CHAMPION!");
             }
             endMatch();
         } else {
-            // 3. If no one has 2 wins, reset for the next round
             resetRound();
         }
     }
     
     private void resetRound() {
-        // Restore HP and Stamina to max
+        currentRound++;
+        lblRoundCounter.setText("Round " + currentRound);
+        
         player1Character.resetStats();
         player2Character.resetStats();
 
-        // Refresh the progress bars
+        isPlayer1Turn = true;
+        toggleButtons();      
         updateBars();
 
-        // Optional: Reset turn to Player 1 every new round
-        isPlayer1Turn = true;
-        toggleButtons();      // Apply button states
-        updateBars();
+        if (matchTimer != null) matchTimer.start();
     }
 
     
@@ -451,6 +526,15 @@ public class FightScreen extends javax.swing.JFrame {
     private void initComponents() {
 
         jpPVPScreen = new javax.swing.JPanel();
+        lblTurnTimer = new javax.swing.JLabel();
+        lblMatchTimer = new javax.swing.JLabel();
+        lblRoundCounter = new javax.swing.JLabel();
+        lblVs = new javax.swing.JLabel();
+        lblPauseBtn = new javax.swing.JLabel();
+        lblPlayer2Name = new javax.swing.JLabel();
+        lblPlayer1Name = new javax.swing.JLabel();
+        lblPlayer2CharName = new javax.swing.JLabel();
+        lblPlayer1CharName = new javax.swing.JLabel();
         lblPlayer1HealthBar = new javax.swing.JLabel();
         lblPlayer2HealthBar = new javax.swing.JLabel();
         lblPlayer1StaminaBar = new javax.swing.JLabel();
@@ -477,41 +561,94 @@ public class FightScreen extends javax.swing.JFrame {
 
         jpPVPScreen.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        lblTurnTimer.setBackground(new java.awt.Color(255, 51, 0));
+        lblTurnTimer.setFont(new java.awt.Font("Segoe UI", 1, 80)); // NOI18N
+        lblTurnTimer.setForeground(new java.awt.Color(255, 0, 0));
+        lblTurnTimer.setText("20");
+        jpPVPScreen.add(lblTurnTimer, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 870, -1, -1));
+
+        lblMatchTimer.setBackground(new java.awt.Color(0, 0, 0));
+        lblMatchTimer.setFont(new java.awt.Font("Times New Normal", 1, 24)); // NOI18N
+        lblMatchTimer.setForeground(new java.awt.Color(0, 0, 0));
+        lblMatchTimer.setText("00:00");
+        jpPVPScreen.add(lblMatchTimer, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 280, -1, -1));
+
+        lblRoundCounter.setBackground(new java.awt.Color(0, 0, 0));
+        lblRoundCounter.setFont(new java.awt.Font("Times New Normal", 1, 36)); // NOI18N
+        lblRoundCounter.setForeground(new java.awt.Color(0, 0, 0));
+        lblRoundCounter.setText("Round 1");
+        jpPVPScreen.add(lblRoundCounter, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 240, -1, -1));
+
+        lblVs.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/lblVs.png"))); // NOI18N
+        jpPVPScreen.add(lblVs, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 110, -1, -1));
+
+        lblPauseBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/pauseBtn.png"))); // NOI18N
+        lblPauseBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblPauseBtnMouseClicked(evt);
+            }
+        });
+        jpPVPScreen.add(lblPauseBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(1850, 20, -1, -1));
+
+        lblPlayer2Name.setBackground(new java.awt.Color(255, 255, 255));
+        lblPlayer2Name.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblPlayer2Name.setForeground(new java.awt.Color(255, 255, 255));
+        lblPlayer2Name.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblPlayer2Name.setText("Player 2");
+        jpPVPScreen.add(lblPlayer2Name, new org.netbeans.lib.awtextra.AbsoluteConstraints(1210, 30, 280, -1));
+
+        lblPlayer1Name.setBackground(new java.awt.Color(255, 255, 255));
+        lblPlayer1Name.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblPlayer1Name.setForeground(new java.awt.Color(255, 255, 255));
+        lblPlayer1Name.setText("Player 1");
+        jpPVPScreen.add(lblPlayer1Name, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 30, 280, -1));
+
+        lblPlayer2CharName.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
+        lblPlayer2CharName.setForeground(new java.awt.Color(0, 0, 0));
+        lblPlayer2CharName.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblPlayer2CharName.setText("jLabel1");
+        jpPVPScreen.add(lblPlayer2CharName, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 30, 400, 80));
+
+        lblPlayer1CharName.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
+        lblPlayer1CharName.setForeground(new java.awt.Color(0, 0, 0));
+        lblPlayer1CharName.setText("jLabel1");
+        jpPVPScreen.add(lblPlayer1CharName, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 30, 400, 80));
+
         lblPlayer1HealthBar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/healthBarNStaminaBar.png"))); // NOI18N
-        jpPVPScreen.add(lblPlayer1HealthBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, 400, 60));
+        jpPVPScreen.add(lblPlayer1HealthBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 110, 400, 60));
 
         lblPlayer2HealthBar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/healthBarNStaminaBar.png"))); // NOI18N
-        jpPVPScreen.add(lblPlayer2HealthBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 50, 400, 60));
+        jpPVPScreen.add(lblPlayer2HealthBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 110, 400, 60));
 
         lblPlayer1StaminaBar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/healthBarNStaminaBar.png"))); // NOI18N
-        jpPVPScreen.add(lblPlayer1StaminaBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 120, 400, 60));
+        jpPVPScreen.add(lblPlayer1StaminaBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 180, 400, 60));
 
         lblPlayer2StaminaBar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/healthBarNStaminaBar.png"))); // NOI18N
-        jpPVPScreen.add(lblPlayer2StaminaBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 120, 400, 60));
+        jpPVPScreen.add(lblPlayer2StaminaBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 180, 400, 60));
 
         pbHealthPlayer1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         pbHealthPlayer1.setForeground(new java.awt.Color(255, 255, 255));
         pbHealthPlayer1.setString("Health");
         pbHealthPlayer1.setStringPainted(true);
-        jpPVPScreen.add(pbHealthPlayer1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, 400, 60));
+        jpPVPScreen.add(pbHealthPlayer1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 110, 400, 60));
 
         pbStaminaPlayer1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         pbStaminaPlayer1.setForeground(new java.awt.Color(255, 255, 255));
         pbStaminaPlayer1.setString("Stamina");
         pbStaminaPlayer1.setStringPainted(true);
-        jpPVPScreen.add(pbStaminaPlayer1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 120, 400, 60));
+        jpPVPScreen.add(pbStaminaPlayer1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 180, 400, 60));
 
         pbStaminaPlayer2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         pbStaminaPlayer2.setForeground(new java.awt.Color(255, 255, 255));
         pbStaminaPlayer2.setString("Stamina");
         pbStaminaPlayer2.setStringPainted(true);
-        jpPVPScreen.add(pbStaminaPlayer2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 120, 400, 60));
+        jpPVPScreen.add(pbStaminaPlayer2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 180, 400, 60));
 
         pbHealthPlayer2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         pbHealthPlayer2.setForeground(new java.awt.Color(255, 255, 255));
         pbHealthPlayer2.setString("Health");
         pbHealthPlayer2.setStringPainted(true);
-        jpPVPScreen.add(pbHealthPlayer2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 50, 400, 60));
+        jpPVPScreen.add(pbHealthPlayer2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 110, 400, 60));
 
         btnSkill1Player1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnSkill1Player1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/skillplaceholder.png"))); // NOI18N
@@ -761,6 +898,75 @@ public class FightScreen extends javax.swing.JFrame {
         toggleButtons();      // Update the buttons
     }//GEN-LAST:event_btnSkill3Player2ActionPerformed
 
+    // PRIME - PAUSE BUTTON WITH ENCODED JPANEL
+    private void lblPauseBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPauseBtnMouseClicked
+        if (matchTimer != null) {
+            matchTimer.stop(); 
+        }
+        if (turnTimer != null) {
+            turnTimer.stop();
+        }
+
+        javax.swing.JDialog pauseMenu = new javax.swing.JDialog(this, "Pause Menu", true);
+        pauseMenu.setSize(250, 300); 
+        pauseMenu.setLocationRelativeTo(this); 
+        pauseMenu.setLayout(new java.awt.GridLayout(4, 1, 15, 15)); 
+
+        javax.swing.JButton btnResume = new javax.swing.JButton("Resume");
+        javax.swing.JButton btnRestart = new javax.swing.JButton("Restart (Change Character)");
+        javax.swing.JButton btnMenu = new javax.swing.JButton("Return to Menu");
+        javax.swing.JButton btnExit = new javax.swing.JButton("Exit Game");
+        
+        boolean[] leavingFight = {false};
+
+        btnResume.addActionListener(e -> {
+            pauseMenu.dispose(); 
+        });
+
+        btnRestart.addActionListener(e -> {
+            leavingFight[0] = true;
+            pauseMenu.dispose(); 
+            
+            CharacterSelectScreen newSelectScreen = new CharacterSelectScreen();
+            
+            if (isArcadeMode) {
+                newSelectScreen.showModePanel("Arcade");
+            } else if (isPVE) {
+                newSelectScreen.showModePanel("PVE");
+            } else {
+                newSelectScreen.showModePanel("PVP");
+            }
+            
+            newSelectScreen.setVisible(true); 
+            this.dispose(); 
+        });
+
+        btnMenu.addActionListener(e -> {
+            leavingFight[0] = true;
+            pauseMenu.dispose(); 
+            new MenuScreen().setVisible(true); 
+            this.dispose(); 
+        });
+
+        btnExit.addActionListener(e -> {
+            System.exit(0); 
+        });
+
+        pauseMenu.add(btnResume);
+        pauseMenu.add(btnRestart);
+        pauseMenu.add(btnMenu);
+        pauseMenu.add(btnExit);
+
+        pauseMenu.setVisible(true); 
+        
+        if (!leavingFight[0] && matchTimer != null) {
+            matchTimer.start();
+        }
+        if (!leavingFight[0] && turnTimer != null) {
+            turnTimer.start();
+        }
+    }//GEN-LAST:event_lblPauseBtnMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -806,12 +1012,21 @@ public class FightScreen extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel jpPVPScreen;
     private javax.swing.JLabel lblBackground;
+    private javax.swing.JLabel lblMatchTimer;
+    private javax.swing.JLabel lblPauseBtn;
+    private javax.swing.JLabel lblPlayer1CharName;
     private javax.swing.JLabel lblPlayer1Character;
     private javax.swing.JLabel lblPlayer1HealthBar;
+    private javax.swing.JLabel lblPlayer1Name;
     private javax.swing.JLabel lblPlayer1StaminaBar;
+    private javax.swing.JLabel lblPlayer2CharName;
     private javax.swing.JLabel lblPlayer2Character;
     private javax.swing.JLabel lblPlayer2HealthBar;
+    private javax.swing.JLabel lblPlayer2Name;
     private javax.swing.JLabel lblPlayer2StaminaBar;
+    private javax.swing.JLabel lblRoundCounter;
+    private javax.swing.JLabel lblTurnTimer;
+    private javax.swing.JLabel lblVs;
     private javax.swing.JLabel lbltxtDialogueFrame;
     private javax.swing.JProgressBar pbHealthPlayer1;
     private javax.swing.JProgressBar pbHealthPlayer2;

@@ -31,7 +31,22 @@ public class UserInputScreen extends javax.swing.JFrame {
         // 3. Set the scaled image to your background label
         lblBackground.setIcon(new javax.swing.ImageIcon(scaledImg));
     }
-
+    
+    private void registerNewUser(String user, String pass) {
+        try (java.io.PrintWriter out = new java.io.PrintWriter(new java.io.BufferedWriter(new java.io.FileWriter("users.txt", true)))) {
+            // Format: Username,Password,Score (Defaults to 0)
+            out.println(user + "," + pass + ",0");
+            javax.swing.JOptionPane.showMessageDialog(this, "Account created! Good luck on the court, " + user + ".");
+            proceedToGame();
+        } catch (java.io.IOException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error saving account.", "System Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void proceedToGame() {
+        new IntroScreen().setVisible(true);
+        this.dispose();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -112,75 +127,57 @@ public class UserInputScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_clearBtnActionPerformed
 
     private void submitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
-        // TODO add your handling code here:
+        String username = txtUsername.getText().trim();
+        String password = txtPassword.getText().trim(); 
         
-        String username = txtUsername.getText();
-        String password = txtPassword.getText(); 
-        
-//        FILEREADING AND FILEWRITING APPLIED HERE (PRIME)
-        
-        // 1. Prevent them from submitting the placeholder text or blank fields
-        if (username.equals("Enter Username") || password.equals("Enter Password") || username.isEmpty() || password.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Please enter a valid Username and Password.", "Wait up!", javax.swing.JOptionPane.WARNING_MESSAGE);
-            return; // Stops the code here
+        // 1. Basic Validation
+        if (username.isEmpty() || username.equals("Enter Username") || 
+            password.isEmpty() || password.equals("Enter Password")) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "NBA Rumble", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
         }
 
-        boolean userExists = false;
-        boolean loginSuccess = false;
+        boolean usernameExists = false;
+        boolean exactMatch = false;
 
-        // 2. Check if the user already exists (Login Attempt)
-        try {
-            java.io.File file = new java.io.File("users.txt");
-            if (file.exists()) {
-                java.util.Scanner scanner = new java.util.Scanner(file);
-                while (scanner.hasNextLine()) {
-                    String line = scanner.nextLine();
-                    String[] userData = line.split(",");
-                    
-                    // Check if the username matches the first column in our text file
-                    if (userData.length >= 2 && userData[0].equals(username)) {
-                        userExists = true;
-                        // Check if the password matches
-                        if (userData[1].equals(password)) {
-                            loginSuccess = true;
+        // 2. Check users.txt for existing records
+        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader("users.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data.length >= 2) {
+                    String storedUser = data[0].trim();
+                    String storedPass = data[1].trim();
+
+                    if (storedUser.equalsIgnoreCase(username)) {
+                        usernameExists = true;
+                        if (storedPass.equals(password)) {
+                            exactMatch = true;
                         }
-                        break; // Stop searching once we find the username
+                        break; // Stop searching once username is found
                     }
                 }
-                scanner.close();
             }
-        } catch (java.io.FileNotFoundException e) {
-            System.out.println("No database found, creating a new one...");
+        } catch (java.io.IOException e) {
+            // If file doesn't exist yet, we just proceed to registration
+            logger.log(java.util.logging.Level.INFO, "Database file not found. A new one will be created.");
         }
 
-        // 3. Process the Results
-        if (userExists) {
-            if (loginSuccess) {
-                // Successful Login!
-                javax.swing.JOptionPane.showMessageDialog(this, "Welcome back to the court, " + username + "!");
-                new IntroScreen().setVisible(true); // Open Main Menu
-                this.dispose(); // Close this screen
-            } else {
-                // Wrong Password
-                javax.swing.JOptionPane.showMessageDialog(this, "Incorrect password! Try again.", "Login Failed", javax.swing.JOptionPane.ERROR_MESSAGE);
-            }
+        // 3. Process Branching Logic
+        if (exactMatch) {
+            // SUCCESSFUL LOGIN: Pair exists in file
+            javax.swing.JOptionPane.showMessageDialog(this, "Welcome back, " + username + "!");
+            proceedToGame();
+        } else if (usernameExists) {
+            // USERNAME TAKEN: Username found but password was different
+            javax.swing.JOptionPane.showMessageDialog(this, "Username already taken! Please check your password.", "Login Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         } else {
-            // 4. User does not exist, so automatically Register them!
-            try {
-                java.io.FileWriter writer = new java.io.FileWriter("users.txt", true);
-                writer.write(username + "," + password + ",0\n"); // Adds them with a starting score of 0
-                writer.close();
-                
-                javax.swing.JOptionPane.showMessageDialog(this, "New account created! Welcome to NBA Rumble, " + username + "!");
-                new IntroScreen().setVisible(true); // Open Main Menu
-                this.dispose(); // Close this screen
-                
-            } catch (java.io.IOException e) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Error saving account data.", "System Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-            }
+            // NEW SIGNUP: Username not found at all
+            registerNewUser(username, password);
         }
     }//GEN-LAST:event_submitBtnActionPerformed
-
+    
+    
     /**
      * @param args the command line arguments
      */

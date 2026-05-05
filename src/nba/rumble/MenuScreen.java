@@ -51,6 +51,7 @@ public class MenuScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnLeaderboard = new javax.swing.JButton();
         btnPVP = new javax.swing.JButton();
         btnPVE = new javax.swing.JButton();
         btnArcade = new javax.swing.JButton();
@@ -61,6 +62,14 @@ public class MenuScreen extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(1920, 1080));
         setSize(new java.awt.Dimension(1920, 1080));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btnLeaderboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Objects/leaderboardBtn.png"))); // NOI18N
+        btnLeaderboard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLeaderboardActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnLeaderboard, new org.netbeans.lib.awtextra.AbsoluteConstraints(1770, 50, 130, 50));
 
         btnPVP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -146,6 +155,42 @@ public class MenuScreen extends javax.swing.JFrame {
 
     }//GEN-LAST:event_AboutButtonActionPerformed
 
+    private void btnLeaderboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLeaderboardActionPerformed
+    //PRIME - LEADERBOARD
+    java.util.List<String> scoreRecords = new java.util.ArrayList<>();
+    
+    try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader("users.txt"))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] data = line.split(",");
+            // Safety Check: Only grab lines that look like a score (2 columns, 2nd column is a number)
+            if (data.length >= 2 && data[1].matches("\\d+")) {
+                scoreRecords.add(line);
+            }
+        }
+    } catch (java.io.IOException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "No records found in users.txt!");
+        return;
+    }
+
+    // Sort: Fast times (lower numbers) first
+    scoreRecords.sort((a, b) -> {
+        int timeA = Integer.parseInt(a.split(",")[1].trim());
+        int timeB = Integer.parseInt(b.split(",")[1].trim());
+        return Integer.compare(timeA, timeB);
+    });
+
+    StringBuilder sb = new StringBuilder("--- ARCADE LEADERBOARD ---\n\n");
+    for (int i = 0; i < Math.min(scoreRecords.size(), 10); i++) {
+        String[] data = scoreRecords.get(i).split(",");
+        int seconds = Integer.parseInt(data[1].trim());
+        String formatted = String.format("%02d:%02d", seconds / 60, seconds % 60);
+        sb.append((i + 1) + ". " + data[0] + " - " + formatted + "\n");
+    }
+
+    javax.swing.JOptionPane.showMessageDialog(this, new javax.swing.JTextArea(sb.toString()), "Leaderboard", javax.swing.JOptionPane.PLAIN_MESSAGE);
+    }//GEN-LAST:event_btnLeaderboardActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -184,6 +229,7 @@ public class MenuScreen extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AboutButton;
     private javax.swing.JButton btnArcade;
+    private javax.swing.JButton btnLeaderboard;
     private javax.swing.JButton btnPVE;
     private javax.swing.JButton btnPVP;
     private javax.swing.JLabel lblMenuScreen;

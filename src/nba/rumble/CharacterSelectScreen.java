@@ -45,6 +45,38 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
     private Character playerArcadeCharacter;
     private String arcadeDifficulty = "Medium";
     
+    //PRIME - FILE HANDLING RECORD IN LEADERBOARD
+    private int arcadeTotalTime = 0;
+
+    private void saveArcadeRecord() {
+        
+        // If you have a global 'currentUser' variable, use it here. 
+        // Otherwise, this prompts the user for their name to record the score.
+        String username = javax.swing.JOptionPane.showInputDialog(this, "Enter your name for the Leaderboard:");
+        if (username == null || username.trim().isEmpty()) username = "Anonymous";
+
+        try (java.io.FileWriter fw = new java.io.FileWriter("users.txt", true);
+             java.io.PrintWriter out = new java.io.PrintWriter(new java.io.BufferedWriter(fw))) {
+
+            // We save it as Name,Time. 
+            // Your login logic uses Name,Password, but that's okay—
+            // the Leaderboard will just ignore the password lines.
+            out.println(username + "," + arcadeTotalTime);
+
+        } catch (java.io.IOException e) {
+            System.out.println("Error saving score to users.txt: " + e.getMessage());
+        }
+        
+//        // Replace "Current_User" with your actual login variable if you have one
+//        String username = "Player1"; 
+//
+//        try (java.io.FileWriter fw = new java.io.FileWriter("user.txt", true);
+//             java.io.PrintWriter out = new java.io.PrintWriter(new java.io.BufferedWriter(fw))) {
+//            out.println(username + "," + arcadeTotalTime);
+//        } catch (java.io.IOException e) {
+//            System.out.println("Error saving score: " + e.getMessage());
+//        }
+    }
     
     private void startFight(){
         
@@ -446,39 +478,65 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
         
         //to show the fightscreen with the applied arcade mode enabled
         FightScreen fightscreen = new FightScreen(player1Character, player2Character, true, arcadeDifficulty);
-        fightscreen.setArcadeMode(true, this); 
+        fightscreen.setArcadeMode(true, this, roundNumber); 
         
         fightscreen.setVisible(true);
         this.dispose();
     }
     
-    public void onArcadeBattleEnd(boolean playerWon, Character opponent){
-        if(playerWon){
-            //if you won, this will move you to the next round
-            currentOpponentIndex++;
-            
-            //resets player stats taga new opponent
+    public void onArcadeBattleEnd(boolean playerWon, Character opponent, int matchTime){
+//        if(playerWon){
+//            //if you won, this will move you to the next round
+//            currentOpponentIndex++;
+//            
+//            //resets player stats taga new opponent
+//            player1Character.resetStats();
+//            
+//            //Show progress message
+//            javax.swing.JOptionPane.showMessageDialog(null, "VICTORY! You defeated " + opponent.getName() + "!\n" + "Progress: " + currentOpponentIndex + " / 7 opponents defeated.", "Arcade Progress", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+//            
+//            //Starts the next battle
+//            startArcadeFight();
+
+        if (playerWon) {
+        // 1. Record the time and move to the next opponent
+        arcadeTotalTime += matchTime; 
+        currentOpponentIndex++;
+
+        // 2. CRITICAL: Reset the player's health and stamina for the next fight
+        if (player1Character != null) {
             player1Character.resetStats();
-            
-            //Show progress message
-            javax.swing.JOptionPane.showMessageDialog(null, "VICTORY! You defeated " + opponent.getName() + "!\n" + "Progress: " + currentOpponentIndex + " / 7 opponents defeated.", "Arcade Progress", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-            
-            //Starts the next battle
-            startArcadeFight();
-        }else{
-            //If you lost, it will ask you if you want to retry or quit
-            Object[] options = {"Retry", "Quit"};
-            int choice = javax.swing.JOptionPane.showOptionDialog(null, "DEFEATED! You were defeated by " + opponent.getName() + ".\n" + "Progress: " + currentOpponentIndex + " / 7 opponents defeated.\n\n" + "What would you like to do?", "Arcade Mode - Game Over", javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-            
-            if(choice == 0){
-                //Retry the same opponent
-                
-                //reset stats
-                player1Character.resetStats();
-                
+        }
+
+        // 3. Check if the ladder is completed
+            if (currentOpponentIndex >= arcadeOpponents.size()) {
+                saveArcadeRecord(); 
+                javax.swing.JOptionPane.showMessageDialog(this, 
+                    "ARCADE COMPLETE!\nTotal Time: " + String.format("%02d:%02d", arcadeTotalTime / 60, arcadeTotalTime % 60), 
+                    "Hall of Fame", 
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+                new MenuScreen().setVisible(true);
+                this.dispose();
+            } else {
+                // Proceed to the next battle with full stats
                 startArcadeFight();
-            }else{
-                //Quit back to main menu 
+            }
+        } else {
+            // Handle defeat (Retry or Quit)
+            Object[] options = {"Retry", "Quit"};
+            int choice = javax.swing.JOptionPane.showOptionDialog(null, 
+                "DEFEATED! You fell to " + opponent.getName() + ".\nProgress: " + currentOpponentIndex + " / 7 defeated.", 
+                "Game Over", 
+                javax.swing.JOptionPane.YES_NO_OPTION, 
+                javax.swing.JOptionPane.ERROR_MESSAGE, 
+                null, options, options[0]);
+
+            if (choice == 0) {
+                // Reset stats even on retry so the player doesn't start with 0 HP
+                player1Character.resetStats();
+                startArcadeFight();
+            } else {
                 new MenuScreen().setVisible(true);
                 this.dispose();
             }
