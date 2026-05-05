@@ -599,8 +599,8 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
         lblCharacterSelectScreen.setIcon(new ImageIcon(img));
         
         //Character Picks placeholders
-        lblChc2.setBackground(new java.awt.Color(0, 0, 0, 150));
-        lblChc1.setBackground(new java.awt.Color(0, 0, 0, 150));
+        //lblChc2.setBackground(new java.awt.Color(0, 0, 0, 150));
+        //lblChc1.setBackground(new java.awt.Color(0, 0, 0, 150));
         
             
      /*   

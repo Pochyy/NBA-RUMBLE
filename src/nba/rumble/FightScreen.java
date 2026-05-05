@@ -208,19 +208,19 @@ public class FightScreen extends javax.swing.JFrame {
                     String botLog = player2Character.useSkill3(player1Character); 
                     appendDialogue(botLog + "\n--------------------");
                     skillSound.play(Clip.Skill.SKILL3);
-                    playSkillAnimation(lblPlayer2Character, player2Character.getSkill3Gif(), player2DefaultIcon);
+                    playSkillAnimation(lblPlayer2Character, player2Character.getSkill3GifFlipped(), player2DefaultIcon);
                     skillUsed = true;
                 } else if (randomSkill >= 2 && player2Character.getStamina() >= player2Character.getSkill2Stamina()) {
                     String botLog = player2Character.useSkill2(player1Character); 
                     appendDialogue(botLog + "\n--------------------");
                     skillSound.play(Clip.Skill.SKILL2);
-                    playSkillAnimation(lblPlayer2Character, player2Character.getSkill2Gif(), player2DefaultIcon);
+                    playSkillAnimation(lblPlayer2Character, player2Character.getSkill2GifFlipped(), player2DefaultIcon);
                     skillUsed = true;
                 } else if (player2Character.getStamina() >= player2Character.getSkill1Stamina()) {
                     String botLog = player2Character.useSkill1(player1Character); 
                     appendDialogue(botLog + "\n--------------------");
                     skillSound.play(Clip.Skill.SKILL1);
-                    playSkillAnimation(lblPlayer2Character, player2Character.getSkill1Gif(), player2DefaultIcon);
+                    playSkillAnimation(lblPlayer2Character, player2Character.getSkill1GifFlipped(), player2DefaultIcon);
                     skillUsed = true;
                 }
             }
@@ -260,7 +260,7 @@ public class FightScreen extends javax.swing.JFrame {
                     //player2Character.useSkill3(player1Character);
                     
                     // BOT NOW IMPLEMENTS ITS RESPECTIVE GIF SKILL 3 ANIMATION
-                    playSkillAnimation(lblPlayer2Character, player2Character.getSkill3Gif(), player2DefaultIcon);
+                    playSkillAnimation(lblPlayer2Character, player2Character.getSkill3GifFlipped(), player2DefaultIcon);
                     
                 } else if (player2Character.getStamina() >= player2Character.getSkill2Stamina()) {
                     
@@ -271,7 +271,7 @@ public class FightScreen extends javax.swing.JFrame {
                     
 //                    player2Character.useSkill2(player1Character);
                     // BOT NOW IMPLEMENTS ITS RESPECTIVE GIF SKILL 2 ANIMATION
-                    playSkillAnimation(lblPlayer2Character, player2Character.getSkill2Gif(), player2DefaultIcon);   
+                    playSkillAnimation(lblPlayer2Character, player2Character.getSkill2GifFlipped(), player2DefaultIcon);   
                     
                 } else if (player2Character.getStamina() >= player2Character.getSkill1Stamina()) {
                     
@@ -282,7 +282,7 @@ public class FightScreen extends javax.swing.JFrame {
 //                    player2Character.useSkill1(player1Character);
 
                     // BOT NOW IMPLEMENTS ITS RESPECTIVE GIF SKILL 1 ANIMATION
-                    playSkillAnimation(lblPlayer2Character, player2Character.getSkill1Gif(), player2DefaultIcon);
+                    playSkillAnimation(lblPlayer2Character, player2Character.getSkill1GifFlipped(), player2DefaultIcon);
                 } else {
                     // Out of stamina, must rest
                     handleInsufficientStamina(player2Character, player1Character, false);
@@ -853,7 +853,7 @@ public class FightScreen extends javax.swing.JFrame {
         appendDialogue(battleLog + "\n--------------------");
         skillSound.play(Clip.Skill.SKILL1);
         
-        playSkillAnimation(lblPlayer2Character, player2Character.getSkill1Gif(), player2DefaultIcon);
+        playSkillAnimation(lblPlayer2Character, player2Character.getSkill1GifFlipped(), player2DefaultIcon);
         
         updateBars();
         isPlayer1Turn = true;
@@ -872,7 +872,7 @@ public class FightScreen extends javax.swing.JFrame {
         appendDialogue(battleLog + "\n--------------------");
         skillSound.play(Clip.Skill.SKILL2);
         
-        playSkillAnimation(lblPlayer2Character, player2Character.getSkill2Gif(), player2DefaultIcon);
+        playSkillAnimation(lblPlayer2Character, player2Character.getSkill2GifFlipped(), player2DefaultIcon);
         
         updateBars();
         isPlayer1Turn = true;
@@ -891,7 +891,7 @@ public class FightScreen extends javax.swing.JFrame {
         appendDialogue(battleLog + "\n--------------------");
         skillSound.play(Clip.Skill.SKILL3);
         
-        playSkillAnimation(lblPlayer2Character, player2Character.getSkill3Gif(), player2DefaultIcon);
+        playSkillAnimation(lblPlayer2Character, player2Character.getSkill3GifFlipped(), player2DefaultIcon);
         
         updateBars();
         isPlayer1Turn = true;
