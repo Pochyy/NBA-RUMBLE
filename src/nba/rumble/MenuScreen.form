@@ -32,9 +32,6 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JButton" name="btnPVP">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="PVP"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPVPActionPerformed"/>
       </Events>
@@ -45,22 +42,16 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JButton" name="btnPVE">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="PVE"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPVEActionPerformed"/>
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="780" y="730" width="440" height="190"/>
+          <AbsoluteConstraints x="660" y="720" width="440" height="190"/>
         </Constraint>
       </Constraints>
     </Component>
     <Component class="javax.swing.JButton" name="btnArcade">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Arcade"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnArcadeActionPerformed"/>
       </Events>

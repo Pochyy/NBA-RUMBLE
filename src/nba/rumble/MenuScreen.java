@@ -21,10 +21,25 @@ public class MenuScreen extends javax.swing.JFrame {
      */
     public MenuScreen() {
         initComponents();
-        
+        Music.getInstance().stop();
+        Music.getInstance().forcePlay(Music.Track.MENU);
         ImageIcon menuScreen = new ImageIcon(getClass().getResource("/Backgrounds/mainmenu.png"));
         Image menuscreen = menuScreen.getImage().getScaledInstance(lblMenuScreen.getWidth(), lblMenuScreen.getHeight(), Image.SCALE_DEFAULT);
         lblMenuScreen.setIcon(new ImageIcon(menuscreen)); 
+         btnPVP.setOpaque(false);
+        btnPVP.setContentAreaFilled(false);
+        btnPVP.setBorderPainted(false);
+        btnPVP.setFocusPainted(false);
+
+        btnPVE.setOpaque(false);
+        btnPVE.setContentAreaFilled(false);
+        btnPVE.setBorderPainted(false);
+        btnPVE.setFocusPainted(false);
+
+        btnArcade.setOpaque(false);
+        btnArcade.setContentAreaFilled(false);
+        btnArcade.setBorderPainted(false);
+        btnArcade.setFocusPainted(false);
     }
 
     /**
@@ -47,7 +62,6 @@ public class MenuScreen extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(1920, 1080));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnPVP.setText("PVP");
         btnPVP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPVPActionPerformed(evt);
@@ -55,15 +69,13 @@ public class MenuScreen extends javax.swing.JFrame {
         });
         getContentPane().add(btnPVP, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 720, 440, 190));
 
-        btnPVE.setText("PVE");
         btnPVE.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPVEActionPerformed(evt);
             }
         });
-        getContentPane().add(btnPVE, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 730, 440, 190));
+        getContentPane().add(btnPVE, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 720, 440, 190));
 
-        btnArcade.setText("Arcade");
         btnArcade.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnArcadeActionPerformed(evt);

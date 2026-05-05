@@ -4,7 +4,7 @@
  */
 package nba.rumble;
 
-
+import Clip.Clip;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import Characters.CharacterLogicClasses.Character;
@@ -14,6 +14,7 @@ import Characters.CharacterLogicClasses.Character;
  */
 public class FightScreen extends javax.swing.JFrame {
     
+    private Clip skillSound = new Clip();
     private int p1RoundWins = 0; //Round Counters
     private int p2RoundWins = 0;
     
@@ -30,7 +31,9 @@ public class FightScreen extends javax.swing.JFrame {
     
     public FightScreen(Character p1, Character p2, boolean isPVE, String botDifficulty){
         initComponents();
-        
+        Music.getInstance().stop();
+        Music.getInstance().forcePlay(Music.Track.FIGHT);
+
         this.player1Character = p1;
         this.player2Character = p2;
         this.isPVE = isPVE; // Save the mode so the rest of the class can use it
@@ -118,16 +121,19 @@ public class FightScreen extends javax.swing.JFrame {
                 if (randomSkill == 3 && player2Character.getStamina() >= player2Character.getSkill3Stamina()) {
                     String botLog = player2Character.useSkill3(player1Character); 
                     appendDialogue(botLog + "\n--------------------");
+                    skillSound.play(Clip.Skill.SKILL3);
                     playSkillAnimation(lblPlayer2Character, player2Character.getSkill3Gif(), player2DefaultIcon);
                     skillUsed = true;
                 } else if (randomSkill >= 2 && player2Character.getStamina() >= player2Character.getSkill2Stamina()) {
                     String botLog = player2Character.useSkill2(player1Character); 
                     appendDialogue(botLog + "\n--------------------");
+                    skillSound.play(Clip.Skill.SKILL2);
                     playSkillAnimation(lblPlayer2Character, player2Character.getSkill2Gif(), player2DefaultIcon);
                     skillUsed = true;
                 } else if (player2Character.getStamina() >= player2Character.getSkill1Stamina()) {
                     String botLog = player2Character.useSkill1(player1Character); 
                     appendDialogue(botLog + "\n--------------------");
+                    skillSound.play(Clip.Skill.SKILL1);
                     playSkillAnimation(lblPlayer2Character, player2Character.getSkill1Gif(), player2DefaultIcon);
                     skillUsed = true;
                 }
@@ -164,6 +170,7 @@ public class FightScreen extends javax.swing.JFrame {
                     // Catch the Bot's attack text
                     String botLog = player2Character.useSkill3(player1Character);
                     appendDialogue(botLog + "\n--------------------");
+                    skillSound.play(Clip.Skill.SKILL3);
                     //player2Character.useSkill3(player1Character);
                     
                     // BOT NOW IMPLEMENTS ITS RESPECTIVE GIF SKILL 3 ANIMATION
@@ -174,6 +181,7 @@ public class FightScreen extends javax.swing.JFrame {
                     // Catch the Bot's attack text
                     String botLog = player2Character.useSkill2(player1Character);
                     appendDialogue(botLog + "\n--------------------");
+                    skillSound.play(Clip.Skill.SKILL2);
                     
 //                    player2Character.useSkill2(player1Character);
                     // BOT NOW IMPLEMENTS ITS RESPECTIVE GIF SKILL 2 ANIMATION
@@ -183,7 +191,8 @@ public class FightScreen extends javax.swing.JFrame {
                     
                     // Catch the Bot's attack text
                     String botLog = player2Character.useSkill1(player1Character);
-                    appendDialogue(botLog + "\n--------------------");                    
+                    appendDialogue(botLog + "\n--------------------");
+                    skillSound.play(Clip.Skill.SKILL1);
 //                    player2Character.useSkill1(player1Character);
 
                     // BOT NOW IMPLEMENTS ITS RESPECTIVE GIF SKILL 1 ANIMATION
@@ -617,8 +626,9 @@ public class FightScreen extends javax.swing.JFrame {
 
         // Put it in the GUI!
         appendDialogue(battleLog + "\n--------------------");
+        skillSound.play(Clip.Skill.SKILL1);
         
-            playSkillAnimation(lblPlayer1Character, player1Character.getSkill1Gif(), player1DefaultIcon);
+        playSkillAnimation(lblPlayer1Character, player1Character.getSkill1Gif(), player1DefaultIcon);
 
         updateBars();
         isPlayer1Turn = false;
@@ -637,6 +647,7 @@ public class FightScreen extends javax.swing.JFrame {
         
         // Put it in the GUI!
         appendDialogue(battleLog + "\n--------------------");
+        skillSound.play(Clip.Skill.SKILL3);
         
         playSkillAnimation(lblPlayer1Character, player1Character.getSkill3Gif(), player1DefaultIcon);
         
@@ -673,6 +684,7 @@ public class FightScreen extends javax.swing.JFrame {
         
         // Put it in the GUI!
         appendDialogue(battleLog + "\n--------------------");
+        skillSound.play(Clip.Skill.SKILL2);
         
         playSkillAnimation(lblPlayer1Character, player1Character.getSkill2Gif(), player1DefaultIcon);
         
@@ -702,6 +714,7 @@ public class FightScreen extends javax.swing.JFrame {
         // GUI IMPLEMENTATION (DIALOGUE BOX)
         String battleLog = player2Character.useSkill1(player1Character);
         appendDialogue(battleLog + "\n--------------------");
+        skillSound.play(Clip.Skill.SKILL1);
         
         playSkillAnimation(lblPlayer2Character, player2Character.getSkill1Gif(), player2DefaultIcon);
         
@@ -720,6 +733,7 @@ public class FightScreen extends javax.swing.JFrame {
         // GUI IMPLEMENTATION (DIALOGUE BOX)
         String battleLog = player2Character.useSkill2(player1Character);
         appendDialogue(battleLog + "\n--------------------");
+        skillSound.play(Clip.Skill.SKILL2);
         
         playSkillAnimation(lblPlayer2Character, player2Character.getSkill2Gif(), player2DefaultIcon);
         
@@ -738,6 +752,7 @@ public class FightScreen extends javax.swing.JFrame {
         // GUI IMPLEMENTATION (DIALOGUE BOX)
         String battleLog = player2Character.useSkill3(player1Character);
         appendDialogue(battleLog + "\n--------------------");
+        skillSound.play(Clip.Skill.SKILL3);
         
         playSkillAnimation(lblPlayer2Character, player2Character.getSkill3Gif(), player2DefaultIcon);
         

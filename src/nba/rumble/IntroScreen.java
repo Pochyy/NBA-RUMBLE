@@ -20,7 +20,7 @@ public class IntroScreen extends javax.swing.JFrame {
      */
     public IntroScreen() {
         initComponents();
-        //to make it fullscreen 
+        Music.getInstance().forcePlay(Music.Track.LOOP);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         ImageIcon pic = new ImageIcon(getClass().getResource("/Backgrounds//introscreen.gif"));
         Image img = pic.getImage().getScaledInstance(lblintroscreen.getWidth(), lblintroscreen.getHeight(), Image.SCALE_DEFAULT);

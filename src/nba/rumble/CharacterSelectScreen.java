@@ -48,6 +48,9 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
     
     private void startFight(){
         
+        Music.getInstance().stop();
+        Music.getInstance().forcePlay(Music.Track.FIGHT);
+
         //UPDATED PART: PRIME
         //Logic intended is to implement the logic for PVE inside the startFight(), para mastart ang FightScreen specifically for PVE
         
