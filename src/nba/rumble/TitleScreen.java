@@ -18,6 +18,8 @@ public class TitleScreen extends javax.swing.JFrame {
      */
     public TitleScreen() {
         initComponents();
+        Music.getInstance().stop();
+        Music.getInstance().forcePlay(Music.Track.MENU);
         //to make it fullscreen 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
