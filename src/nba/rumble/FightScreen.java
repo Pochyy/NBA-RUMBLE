@@ -320,7 +320,7 @@ public class FightScreen extends javax.swing.JFrame {
         botBrainTimer.start();
     }
     
-    
+     
     private void setSkillNames() {
     // Player 1 buttons
     btnSkill1Player1.setText(player1Character.getSkill1Name());
