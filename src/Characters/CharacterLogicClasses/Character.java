@@ -140,6 +140,9 @@ public abstract class Character {
     public abstract String getSkill1Gif();
     public abstract String getSkill2Gif();
     public abstract String getSkill3Gif();
+    public abstract String getSkill1GifFlipped();
+    public abstract String getSkill2GifFlipped();
+    public abstract String getSkill3GifFlipped();
     public abstract String getSkill1Name();
     public abstract String getSkill2Name();
     public abstract String getSkill3Name();

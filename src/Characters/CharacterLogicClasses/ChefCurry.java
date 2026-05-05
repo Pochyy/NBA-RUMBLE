@@ -31,6 +31,21 @@ public class ChefCurry extends Character {
     }
     
     @Override
+    public String getSkill1GifFlipped(){
+        return "/Characters/StephenCurry/steph_skill1Flipped.gif";
+    }
+    
+    @Override
+    public String getSkill2GifFlipped(){
+        return "/Characters/StephenCurry/steph_skill2Flipped.gif";
+    }
+    
+    @Override
+    public String getSkill3GifFlipped(){
+        return "/Characters/StephenCurry/steph_ultFlipped.gif";
+    }
+    
+    @Override
     public String useSkill1(Character target) {
         
         // Deduct stamina and advance turn counter

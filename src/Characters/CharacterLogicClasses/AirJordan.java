@@ -24,7 +24,22 @@ public class AirJordan extends Character {
         return "/Characters/Jordan/jordan_ult.gif";
     }
     
+    @Override
+    public String getSkill1GifFlipped(){
+        return "/Characters/Jordan/jordan_skill1Flipped.gif";
+    }
     
+    @Override
+    public String getSkill2GifFlipped(){
+        return "/Characters/Jordan/jordan_skill2Flipped.gif";
+    }
+    
+    @Override
+    public String getSkill3GifFlipped(){
+        return "/Characters/Jordan/jordan_ultFlipped.gif";
+    }
+    
+
     
     @Override
     public String getImagePath(){
