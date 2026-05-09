@@ -151,7 +151,6 @@ public class Lebrony extends Character {
     public String getBackstory() {
         return "Born beneath the roaring crowds and stadium, Lebrony was whispered to be the prophesied child of the ancient King of Basketball,\n" +
                "a bloodline said to carry the strength of giants, the vision of prophets, and the will of warriors.\n" +
-               "Though he grew up not in humble streets, he was blessed with the crown that found him.\n" +
-               "Earned in struggle and desperation, he rises up to the kingdom of court, where he should belong.";
+               "Though he grew up not in humble streets, he was blessed with the crown that found him.";
     }
 }
