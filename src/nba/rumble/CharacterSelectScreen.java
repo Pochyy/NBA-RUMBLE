@@ -32,7 +32,9 @@ import Characters.CharacterLogicClasses.Wembymama;
 
 
 public class CharacterSelectScreen extends javax.swing.JFrame {
-
+        private BackstoryScreen backstoryPVP;
+        private BackstoryScreen backstoryPVE;
+        private BackstoryScreen backstoryArcade;
     // true = Bot picks itself, false = Player picks for Bot
     private boolean doesBotPickRandom = true;
     
@@ -593,11 +595,12 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
     public CharacterSelectScreen() {
         initComponents();
         setupCharacterButtons();
-        
+        setupBackstoryPanels();
         ImageIcon pic = new ImageIcon(getClass().getResource("/Backgrounds/SelectScreenCharacters.png"));
         Image img = pic.getImage().getScaledInstance(lblCharacterSelectScreen.getWidth(), lblCharacterSelectScreen.getHeight(), Image.SCALE_DEFAULT);
         lblCharacterSelectScreen.setIcon(new ImageIcon(img));
-        
+        lblChc2.setBackground(new java.awt.Color(0, 0, 0, 150));
+        lblChc1.setBackground(new java.awt.Color(0, 0, 0, 150));
         //Character Picks placeholders
         //lblChc2.setBackground(new java.awt.Color(0, 0, 0, 150));
         //lblChc1.setBackground(new java.awt.Color(0, 0, 0, 150));
@@ -1132,7 +1135,62 @@ public class CharacterSelectScreen extends javax.swing.JFrame {
     private void btnSteph1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSteph1ActionPerformed
         selectCharacter(new ChefCurry());
     }//GEN-LAST:event_btnSteph1ActionPerformed
+        private void addHoverListeners(javax.swing.JButton btn, Character character, BackstoryScreen backstory) {
+    btn.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            backstory.showCharacterInfo(
+                character.getName(),
+                character.getImagePath(),
+                character.getBackstory(),
+                CharacterSelectScreen.this.getClass()
+            );
+        }
+        @Override
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            backstory.hidePanel();
+        }
+    });
+}
+            private void setupBackstoryPanels() {
+    int bsX = 675, bsY = 290, bsW = 410, bsH = 370;
 
+    backstoryPVP = new BackstoryScreen();
+    pnlPVP.add(backstoryPVP, new org.netbeans.lib.awtextra.AbsoluteConstraints(bsX, bsY, bsW, bsH));
+    pnlPVP.setComponentZOrder(backstoryPVP, 0);
+    addHoverListeners(btnJordan,  new AirJordan(),  backstoryPVP);
+    addHoverListeners(btnKobe,    new Kowbe(),       backstoryPVP);
+    addHoverListeners(btnLarry,   new LarryBird(),   backstoryPVP);
+    addHoverListeners(btnLebron,  new Lebrony(),     backstoryPVP);
+    addHoverListeners(btnShack,   new ShakeroNiel(), backstoryPVP);
+    addHoverListeners(btnLuca,    new Luca(),        backstoryPVP);
+    addHoverListeners(btnSteph,   new ChefCurry(),   backstoryPVP);
+    addHoverListeners(btnWemba,   new Wembymama(),   backstoryPVP);
+
+    backstoryPVE = new BackstoryScreen();
+    pnlPVE.add(backstoryPVE, new org.netbeans.lib.awtextra.AbsoluteConstraints(bsX, bsY, bsW, bsH));
+    pnlPVE.setComponentZOrder(backstoryPVE, 0);
+    addHoverListeners(btnJordan1, new AirJordan(),  backstoryPVE);
+    addHoverListeners(btnKobe1,   new Kowbe(),       backstoryPVE);
+    addHoverListeners(btnLarry1,  new LarryBird(),   backstoryPVE);
+    addHoverListeners(btnLebron1, new Lebrony(),     backstoryPVE);
+    addHoverListeners(btnShack1,  new ShakeroNiel(), backstoryPVE);
+    addHoverListeners(btnLuca1,   new Luca(),        backstoryPVE);
+    addHoverListeners(btnSteph1,  new ChefCurry(),   backstoryPVE);
+    addHoverListeners(btnWemba1,  new Wembymama(),   backstoryPVE);
+
+    backstoryArcade = new BackstoryScreen();
+    pnlArcade.add(backstoryArcade, new org.netbeans.lib.awtextra.AbsoluteConstraints(bsX, bsY, bsW, bsH));
+    pnlArcade.setComponentZOrder(backstoryArcade, 0);
+    addHoverListeners(btnJordan2, new AirJordan(),  backstoryArcade);
+    addHoverListeners(btnKobe2,   new Kowbe(),       backstoryArcade);
+    addHoverListeners(btnLarry2,  new LarryBird(),   backstoryArcade);
+    addHoverListeners(btnLebron2, new Lebrony(),     backstoryArcade);
+    addHoverListeners(btnShack2,  new ShakeroNiel(), backstoryArcade);
+    addHoverListeners(btnLuca2,   new Luca(),        backstoryArcade);
+    addHoverListeners(btnSteph2,  new ChefCurry(),   backstoryArcade);
+    addHoverListeners(btnWemba2,  new Wembymama(),   backstoryArcade);
+}
     
     /**
      * @param args the command line arguments
